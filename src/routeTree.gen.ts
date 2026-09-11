@@ -13,10 +13,12 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AddListingRouteImport } from './routes/add-listing'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BecomeSellerRouteImport } from './routes/become-seller'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as MeremothMallHomepageUiRouteImport } from './routes/meremoth-mall-homepage-ui'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -43,6 +45,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BecomeSellerRoute = BecomeSellerRouteImport.update({
   id: '/become-seller',
   path: '/become-seller',
@@ -61,6 +68,11 @@ const DashboardRoute = DashboardRouteImport.update({
 const InboxRoute = InboxRouteImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeremothMallHomepageUiRoute = MeremothMallHomepageUiRouteImport.update({
+  id: '/meremoth-mall-homepage-ui',
+  path: '/meremoth-mall-homepage-ui',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -94,10 +106,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/add-listing': typeof AddListingRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/inbox': typeof InboxRoute
+  '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
@@ -109,10 +123,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/add-listing': typeof AddListingRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/inbox': typeof InboxRoute
+  '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
@@ -125,10 +141,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/add-listing': typeof AddListingRoute
   '/admin': typeof AdminRoute
+  '/auth': typeof AuthRoute
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
   '/inbox': typeof InboxRoute
+  '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
@@ -142,10 +160,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/add-listing'
     | '/admin'
+    | '/auth'
     | '/become-seller'
     | '/contact'
     | '/dashboard'
     | '/inbox'
+    | '/meremoth-mall-homepage-ui'
     | '/pricing'
     | '/search'
     | '/terms'
@@ -157,10 +177,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/add-listing'
     | '/admin'
+    | '/auth'
     | '/become-seller'
     | '/contact'
     | '/dashboard'
     | '/inbox'
+    | '/meremoth-mall-homepage-ui'
     | '/pricing'
     | '/search'
     | '/terms'
@@ -172,10 +194,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/add-listing'
     | '/admin'
+    | '/auth'
     | '/become-seller'
     | '/contact'
     | '/dashboard'
     | '/inbox'
+    | '/meremoth-mall-homepage-ui'
     | '/pricing'
     | '/search'
     | '/terms'
@@ -188,10 +212,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AddListingRoute: typeof AddListingRoute
   AdminRoute: typeof AdminRoute
+  AuthRoute: typeof AuthRoute
   BecomeSellerRoute: typeof BecomeSellerRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
   InboxRoute: typeof InboxRoute
+  MeremothMallHomepageUiRoute: typeof MeremothMallHomepageUiRoute
   PricingRoute: typeof PricingRoute
   SearchRoute: typeof SearchRoute
   TermsRoute: typeof TermsRoute
@@ -229,6 +255,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/become-seller': {
       id: '/become-seller'
       path: '/become-seller'
@@ -255,6 +288,13 @@ declare module '@tanstack/react-router' {
       path: '/inbox'
       fullPath: '/inbox'
       preLoaderRoute: typeof InboxRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meremoth-mall-homepage-ui': {
+      id: '/meremoth-mall-homepage-ui'
+      path: '/meremoth-mall-homepage-ui'
+      fullPath: '/meremoth-mall-homepage-ui'
+      preLoaderRoute: typeof MeremothMallHomepageUiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -300,10 +340,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AddListingRoute: AddListingRoute,
   AdminRoute: AdminRoute,
+  AuthRoute: AuthRoute,
   BecomeSellerRoute: BecomeSellerRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
   InboxRoute: InboxRoute,
+  MeremothMallHomepageUiRoute: MeremothMallHomepageUiRoute,
   PricingRoute: PricingRoute,
   SearchRoute: SearchRoute,
   TermsRoute: TermsRoute,
