@@ -1,352 +1,237 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
-import { Card, CardContent } from "@/components/ui/card";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import * as Icons from "lucide-react";
+import { Heart, MapPin, Search, SlidersHorizontal, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { MallShell } from "@/components/mall/Chrome";
+import {
+  CATEGORIES,
+  LISTINGS,
+  TOP_PAINTERS,
+  fcfa,
+  listingsByCategory,
+  type Listing,
+} from "@/lib/mall-data";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MERE MOTH MALL - Bottes, Gants 12kV & Pierre à Douala" },
+      { title: "Meremoth Mall — Complete Marketplace in Douala, Cameroon" },
       {
         name: "description",
         content:
-          "Boutique MERE MOTH MALL à Douala : bottes de sécurité, gants isolants 12kV et pierre de construction. Commande rapide par MoMo au 653779134.",
+          "Buy and sell products, services, consultants, house plans, real estate, vehicles, jobs, food and courses on Meremoth Mall. Built in Douala for Cameroon, open to the world.",
       },
-      { property: "og:title", content: "MERE MOTH MALL - Équipements & Matériaux à Douala" },
+      { property: "og:title", content: "Meremoth Mall — Complete Marketplace" },
       {
         property: "og:description",
         content:
-          "Bottes, gants 12kV et pierre disponibles à Douala. Paiement Mobile Money 653779134.",
+          "9 categories, verified Cameroonian sellers, WhatsApp ordering and secure escrow. Contact meremoth admin on 653779134.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: Index,
+  component: Home,
 });
 
-type Categorie = "Bottes" | "Gants" | "Pierre";
-
-type Produit = {
-  id: string;
-  nom: string;
-  prix: number;
-  categorie: Categorie;
-  description: string;
-};
-
-const CATEGORIES: Categorie[] = ["Bottes", "Gants", "Pierre"];
-
-const PRODUITS_INITIAUX: Produit[] = [
-  {
-    id: "1",
-    nom: "Bottes de sécurité montantes",
-    prix: 18000,
-    categorie: "Bottes",
-    description: "Semelle anti-perforation, embout acier. Pointures 39 à 46.",
-  },
-  {
-    id: "2",
-    nom: "Bottes en caoutchouc chantier",
-    prix: 9500,
-    categorie: "Bottes",
-    description: "Étanches, idéales saison des pluies et travaux humides.",
-  },
-  {
-    id: "3",
-    nom: "Gants isolants 12kV",
-    prix: 25000,
-    categorie: "Gants",
-    description: "Latex diélectrique testé 12kV, conformes travaux électriques.",
-  },
-  {
-    id: "4",
-    nom: "Gants de manutention renforcés",
-    prix: 3500,
-    categorie: "Gants",
-    description: "Paume enduite, bonne prise, résistants à l'abrasion.",
-  },
-  {
-    id: "5",
-    nom: "Pierre concassée 15/25",
-    prix: 145000,
-    categorie: "Pierre",
-    description: "Livraison camion benne dans Douala. Prix par voyage.",
-  },
-  {
-    id: "6",
-    nom: "Moellon de fondation",
-    prix: 120000,
-    categorie: "Pierre",
-    description: "Pierre brute pour soubassement et fondations.",
-  },
-];
-
-const EMOJI: Record<Categorie, string> = {
-  Bottes: "🥾",
-  Gants: "🧤",
-  Pierre: "🪨",
-};
-
-const MOMO = "653779134";
-const PASS = "MereMoth2026";
-const STORAGE_KEY = "meremoth-produits";
-
-function formatPrix(n: number) {
-  return new Intl.NumberFormat("fr-FR").format(n) + " FCFA";
+export function ListingCard({ listing }: { listing: Listing }) {
+  return (
+    <Card className="overflow-hidden rounded-2xl border-border shadow-sm transition hover:shadow-md">
+      <Link to="/listing/$id" params={{ id: listing.id }}>
+        <div className="relative flex h-28 items-center justify-center bg-secondary text-5xl">
+          {listing.emoji}
+          {listing.sponsored && (
+            <Badge className="absolute left-2 top-2 bg-amber-500 text-white">Sponsored</Badge>
+          )}
+          <Heart className="absolute right-2 top-2 h-5 w-5 text-muted-foreground" />
+        </div>
+        <CardContent className="space-y-1 p-3">
+          <p className="line-clamp-2 text-sm font-semibold leading-tight">{listing.title}</p>
+          <p className="text-base font-bold text-primary">
+            {fcfa(listing.price)}
+            {listing.priceUnit ?? ""}
+          </p>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+            {listing.rating} · {listing.sold ? `${listing.sold} sold` : `${listing.reviews} reviews`}
+          </div>
+          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+            <MapPin className="h-3 w-3" /> {listing.location}
+          </div>
+        </CardContent>
+      </Link>
+    </Card>
+  );
 }
 
-function Index() {
-  const [produits, setProduits] = useState<Produit[]>(PRODUITS_INITIAUX);
-  const [filtre, setFiltre] = useState<"Tout" | Categorie>("Tout");
-  const [adminOuvert, setAdminOuvert] = useState(false);
-  const [pass, setPass] = useState("");
-  const [connecte, setConnecte] = useState(false);
-  const [erreur, setErreur] = useState("");
-  const [form, setForm] = useState({
-    nom: "",
-    prix: "",
-    categorie: "Bottes" as Categorie,
-    description: "",
-  });
+function Row({
+  title,
+  subtitle,
+  items,
+}: {
+  title: string;
+  subtitle?: string;
+  items: Listing[];
+}) {
+  if (items.length === 0) return null;
+  return (
+    <section className="mt-7">
+      <div className="mb-2 flex items-end justify-between">
+        <div>
+          <h2 className="text-lg font-bold">{title}</h2>
+          {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
+        </div>
+        <Link to="/search" className="text-sm text-primary hover:underline">
+          See all
+        </Link>
+      </div>
+      <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2">
+        {items.map((l) => (
+          <div key={l.id} className="w-44 shrink-0">
+            <ListingCard listing={l} />
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
-  useEffect(() => {
-    const brut = localStorage.getItem(STORAGE_KEY);
-    if (brut) {
-      try {
-        setProduits(JSON.parse(brut) as Produit[]);
-      } catch {
-        /* données invalides ignorées */
-      }
-    }
-  }, []);
+function Home() {
+  const [condition, setCondition] = useState<"All" | "Brand New" | "Okaza / Second Hand">("All");
+  const [query, setQuery] = useState("");
 
-  const enregistrer = (liste: Produit[]) => {
-    setProduits(liste);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(liste));
-  };
-
-  const visibles = filtre === "Tout" ? produits : produits.filter((p) => p.categorie === filtre);
-
-  const ajouter = () => {
-    if (!form.nom.trim() || !form.prix.trim()) {
-      setErreur("Nom et prix obligatoires.");
-      return;
-    }
-    setErreur("");
-    enregistrer([
-      {
-        id: crypto.randomUUID(),
-        nom: form.nom.trim(),
-        prix: Number(form.prix) || 0,
-        categorie: form.categorie,
-        description: form.description.trim(),
-      },
-      ...produits,
-    ]);
-    setForm({ nom: "", prix: "", categorie: "Bottes", description: "" });
-  };
+  const filter = (items: Listing[]) =>
+    items.filter(
+      (l) =>
+        (condition === "All" || l.condition === condition) &&
+        (query.trim() === "" || l.title.toLowerCase().includes(query.toLowerCase())),
+    );
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-primary text-primary-foreground">
-        <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-4 py-5">
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">🌾 MERE MOTH MALL</h1>
-            <p className="mt-1 text-sm opacity-90">
-              Bottes, Gants 12kV, Pierre — Douala · MoMo {MOMO}
-            </p>
-          </div>
-          <Button variant="secondary" onClick={() => setAdminOuvert(true)}>
-            Admin
+    <MallShell>
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search products, services, properties, jobs, vehicles..."
+            className="rounded-2xl bg-card pl-9"
+          />
+        </div>
+        <Button asChild variant="outline" size="icon" className="rounded-2xl">
+          <Link to="/search" aria-label="Filters">
+            <SlidersHorizontal className="h-4 w-4" />
+          </Link>
+        </Button>
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
+        {(["All", "Brand New", "Okaza / Second Hand"] as const).map((c) => (
+          <Button
+            key={c}
+            size="sm"
+            variant={condition === c ? "default" : "outline"}
+            className="rounded-full"
+            onClick={() => setCondition(c)}
+          >
+            {c === "Okaza / Second Hand" ? "Okaza / Second Hand" : c}
           </Button>
-        </div>
-      </header>
+        ))}
+      </div>
 
-      <main className="mx-auto max-w-5xl px-4 py-8">
-        <div className="mb-6 flex flex-wrap gap-2">
-          {(["Tout", ...CATEGORIES] as const).map((c) => (
-            <Button
-              key={c}
-              size="sm"
-              variant={filtre === c ? "default" : "outline"}
-              onClick={() => setFiltre(c)}
-            >
-              {c}
-            </Button>
-          ))}
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visibles.map((p) => (
-            <Card key={p.id} className="overflow-hidden">
-              <div className="flex h-32 items-center justify-center bg-secondary text-5xl">
-                {EMOJI[p.categorie]}
-              </div>
-              <CardContent className="space-y-2 p-4">
-                <Badge variant="secondary">{p.categorie}</Badge>
-                <h2 className="font-semibold leading-tight">{p.nom}</h2>
-                {p.description && (
-                  <p className="text-sm text-muted-foreground">{p.description}</p>
-                )}
-                <p className="text-lg font-bold text-primary">{formatPrix(p.prix)}</p>
-                <Button asChild className="w-full">
-                  <a
-                    href={`https://wa.me/237${MOMO}?text=${encodeURIComponent(
-                      `Bonjour MERE MOTH MALL, je souhaite commander : ${p.nom}`,
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Commander
-                  </a>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {visibles.length === 0 && (
-          <p className="py-16 text-center text-muted-foreground">
-            Aucun produit dans cette catégorie.
-          </p>
-        )}
-      </main>
-
-      <footer className="border-t border-border py-8 text-center text-sm text-muted-foreground">
-        MERE MOTH MALL · Douala, Cameroun · Mobile Money {MOMO}
-      </footer>
-
-      <Dialog
-        open={adminOuvert}
-        onOpenChange={(o) => {
-          setAdminOuvert(o);
-          if (!o) {
-            setPass("");
-            setErreur("");
-          }
-        }}
-      >
-        <DialogContent className="max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Espace Admin</DialogTitle>
-            <DialogDescription>
-              {connecte
-                ? "Ajoutez un nouveau produit à la boutique."
-                : "Entrez le mot de passe pour gérer les produits."}
-            </DialogDescription>
-          </DialogHeader>
-
-          {!connecte ? (
-            <div className="space-y-3">
-              <Label htmlFor="pass">Mot de passe</Label>
-              <Input
-                id="pass"
-                type="password"
-                value={pass}
-                onChange={(e) => setPass(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    if (pass === PASS) {
-                      setConnecte(true);
-                      setErreur("");
-                    } else setErreur("Mot de passe incorrect.");
-                  }
-                }}
-              />
-              {erreur && <p className="text-sm text-destructive">{erreur}</p>}
-              <Button
-                className="w-full"
-                onClick={() => {
-                  if (pass === PASS) {
-                    setConnecte(true);
-                    setErreur("");
-                  } else setErreur("Mot de passe incorrect.");
-                }}
+      <section className="mt-6">
+        <h2 className="mb-3 text-lg font-bold">Categories</h2>
+        <div className="grid grid-cols-3 gap-3">
+          {CATEGORIES.map((c) => {
+            const Icon = (Icons as unknown as Record<string, Icons.LucideIcon>)[c.icon] ?? Icons.Tag;
+            return (
+              <Link
+                key={c.id}
+                to="/search"
+                search={{ category: c.id }}
+                className="relative flex flex-col items-center gap-1 rounded-2xl bg-card p-3 text-center shadow-sm transition hover:shadow-md"
               >
-                Entrer
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="nom">Nom du produit</Label>
-                <Input
-                  id="nom"
-                  value={form.nom}
-                  onChange={(e) => setForm({ ...form, nom: e.target.value })}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="prix">Prix (FCFA)</Label>
-                <Input
-                  id="prix"
-                  type="number"
-                  value={form.prix}
-                  onChange={(e) => setForm({ ...form, prix: e.target.value })}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Catégorie</Label>
-                <div className="flex gap-2">
-                  {CATEGORIES.map((c) => (
-                    <Button
-                      key={c}
-                      type="button"
-                      size="sm"
-                      variant={form.categorie === c ? "default" : "outline"}
-                      onClick={() => setForm({ ...form, categorie: c })}
-                    >
-                      {c}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="desc">Description</Label>
-                <Input
-                  id="desc"
-                  value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
-                />
-              </div>
-              {erreur && <p className="text-sm text-destructive">{erreur}</p>}
-              <Button className="w-full" onClick={ajouter}>
-                Sauvegarder
-              </Button>
+                {c.isNew && (
+                  <Badge className="absolute -right-1 -top-2 bg-primary text-primary-foreground">
+                    NEW
+                  </Badge>
+                )}
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary">
+                  <Icon className="h-5 w-5 text-primary" />
+                </span>
+                <span className="text-xs font-semibold leading-tight">{c.name}</span>
+                <span className="text-[10px] text-muted-foreground">{c.count}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
 
-              <div className="space-y-2 pt-4">
-                <p className="text-sm font-medium">Produits ({produits.length})</p>
-                {produits.map((p) => (
-                  <div
-                    key={p.id}
-                    className="flex items-center justify-between gap-2 rounded-md border border-border px-3 py-2 text-sm"
-                  >
-                    <span className="truncate">{p.nom}</span>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => enregistrer(produits.filter((x) => x.id !== p.id))}
-                    >
-                      Supprimer
-                    </Button>
-                  </div>
-                ))}
+      <Row
+        title="Trending products"
+        subtitle="Most viewed this week"
+        items={filter(listingsByCategory("products"))}
+      />
+
+      <section className="mt-7">
+        <h2 className="mb-2 text-lg font-bold">Top Painters</h2>
+        <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2">
+          {TOP_PAINTERS.map((p) => (
+            <Link
+              key={p.name}
+              to="/listing/$id"
+              params={{ id: p.id }}
+              className="w-40 shrink-0 rounded-2xl bg-card p-3 text-center shadow-sm"
+            >
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-3xl">
+                {p.emoji}
               </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
+              <p className="mt-2 text-sm font-semibold">{p.name}</p>
+              <p className="text-xs text-muted-foreground">
+                ⭐ {p.rating} · {p.jobs} jobs
+              </p>
+              <Badge className="mt-1 bg-primary text-primary-foreground">Verified</Badge>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      <Row
+        title="House Plans from 25,000 FCFA"
+        subtitle="Floor plan + 3D render + PDF + Bill of Quantities"
+        items={filter(listingsByCategory("builders"))}
+      />
+      <Row
+        title="Land Plots"
+        subtitle="Aerial drone views with location pin"
+        items={filter(LISTINGS.filter((l) => l.sub === "Land for Sale"))}
+      />
+      <Row
+        title="Top Real Estate"
+        items={filter(listingsByCategory("real-estate"))}
+      />
+      <Row title="Latest Vehicles" items={filter(listingsByCategory("vehicles"))} />
+      <Row title="Latest Jobs" items={filter(listingsByCategory("jobs"))} />
+      <Row title="Food & Restaurants" items={filter(listingsByCategory("food"))} />
+      <Row title="Education & Training" items={filter(listingsByCategory("education"))} />
+      <Row title="Services near you" items={filter(listingsByCategory("services"))} />
+      <Row title="Consultants" items={filter(listingsByCategory("consultants"))} />
+
+      <div className="mt-8 rounded-2xl bg-card p-5 text-center shadow-sm">
+        <h3 className="text-lg font-bold">Sell on Meremoth Mall</h3>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Products, services, house plans, land, vehicles, jobs, food and courses — reach buyers in
+          Cameroon and worldwide.
+        </p>
+        <Button asChild className="mt-3 rounded-2xl">
+          <Link to="/become-seller">Become a Seller</Link>
+        </Button>
+      </div>
+    </MallShell>
   );
 }
