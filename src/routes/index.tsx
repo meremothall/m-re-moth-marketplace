@@ -188,8 +188,11 @@ function Home() {
               params={{ id: p.id }}
               className="w-40 shrink-0 rounded-2xl bg-card p-3 text-center shadow-sm"
             >
-              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-3xl">
-                {p.emoji}
+              <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-lg font-bold text-primary">
+                {p.name
+                  .split(" ")
+                  .map((w) => w[0])
+                  .join("")}
               </div>
               <p className="mt-2 text-sm font-semibold">{p.name}</p>
               <p className="text-xs text-muted-foreground">

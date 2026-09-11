@@ -37,8 +37,8 @@ function ContactPage() {
 
       <div className="mt-5 rounded-2xl bg-card p-5 shadow-sm">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-3xl">
-            🧑🏿‍💼
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary text-xl font-bold text-primary">
+            EA
           </div>
           <div>
             <p className="text-lg font-bold">{ADMIN.name}</p>
