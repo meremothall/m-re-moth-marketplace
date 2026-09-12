@@ -1,14 +1,44 @@
-# Welcome to your Lovable project
+# Mère Moth Marketplace
+
+---START COPY--- <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>MERE MOTH MALL - FullStack</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body class="bg-gray-50">
+
+🌾 MERE MOTH MALL
+
++ VENDREAdmin
+
+Bottes, Gants 12kV, Pierre - Douala | MoMo 653779134
+
+ToutBottesGantsPierre
+
+Admin
+
+×
+
+Entrer
+
+Pass: MereMoth2026
+
+Activer Backend
+
++ Produit
+
+×
+
+BottesGantsPierreSauvegarder
+
+
+
+ ---END COPY---
 
 This project was built with [Lovable](https://lovable.dev).
 
 ## Build with Lovable
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+Continue developing this project in the [Lovable editor](https://lovable.dev/projects/95a5939f-fb9c-47b0-b9dd-b7df4153f1a2).
 
 - **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+- **Stay in sync**: every change made in Lovable is committed straight to this repository.
+- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
 
 ## Development
 
@@ -20,10 +50,3 @@ cd <repository-name>
 npm i
 npm run dev
 ```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
