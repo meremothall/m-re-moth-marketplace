@@ -17,7 +17,9 @@ import { Input } from "@/components/ui/input";
 import { MallShell } from "@/components/mall/Chrome";
 import {
   CATEGORIES,
+  DOUALA_AREAS,
   LISTINGS,
+  SELLERS,
   TOP_PAINTERS,
   fcfa,
   listingsByCategory,
