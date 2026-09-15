@@ -275,6 +275,16 @@ function Home() {
         subtitle="Most viewed this week"
         items={filter(listingsByCategory("products"))}
       />
+      <Row
+        title="Hotels & Short Stays"
+        subtitle="Price per night · escrow-protected 30% deposit"
+        items={filter(listingsByCategory("hotels"))}
+      />
+      <Row
+        title="Transportation"
+        subtitle="Cars, motos, trucks and bus tickets with verified drivers"
+        items={filter(listingsByCategory("transport"))}
+      />
 
       <section className="mt-7">
         <h2 className="mb-2 text-lg font-bold">Top Painters</h2>
