@@ -167,9 +167,17 @@ function SearchPage() {
         ))}
       </div>
       {results.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          No listing matches these filters yet.
-        </p>
+        <div className="space-y-3 py-10 text-center">
+          <p className="text-muted-foreground">No listing matches these filters yet.</p>
+          <PostWantedDialog
+            onSubmit={addWanted}
+            trigger={
+              <Button className="rounded-2xl bg-amber-500 text-white hover:bg-amber-600">
+                Can&apos;t find it? Post WANTED Request
+              </Button>
+            }
+          />
+        </div>
       )}
     </MallShell>
   );
