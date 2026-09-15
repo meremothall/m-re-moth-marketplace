@@ -6,7 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MallShell } from "@/components/mall/Chrome";
 import { ListingCard } from "./index";
-import { CATEGORIES, CITIES, LISTINGS, SELLERS, type CategoryId } from "@/lib/mall-data";
+import {
+  CATEGORIES,
+  CITIES,
+  DOUALA_AREAS,
+  LISTINGS,
+  SELLERS,
+  type CategoryId,
+} from "@/lib/mall-data";
+import { useWanted } from "@/lib/wanted";
+import { PostWantedDialog } from "./wanted";
 
 type SearchParams = { category?: CategoryId; q?: string };
 
