@@ -4,16 +4,17 @@ import {
   Search,
   Plus,
   MessageCircle,
-  Headset,
   Leaf,
   User,
   ArrowLeft,
   Phone,
   Mail,
   MapPin,
+  Megaphone,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { ADMIN, ADMIN_WA_LINK } from "@/lib/mall-data";
+import { NEW_WANTED_COUNT } from "@/lib/wanted";
 
 export function Logo({ size = 40 }: { size?: number }) {
   return (
