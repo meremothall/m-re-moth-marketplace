@@ -206,6 +206,7 @@ export function MallShell({
       <main className="mx-auto max-w-5xl px-4 py-5">{children}</main>
       <MallFooter />
       <WhatsAppWidget />
+      <WantedFab />
       <BottomNav />
     </div>
   );
