@@ -151,16 +151,33 @@ function Row({
   );
 }
 
+const PLACE_PILLS = ["All", "Akwa", "Bonapriso", "Bonaberi", "Deido", "Bonanjo", "Bali"] as const;
+
 function Home() {
   const [condition, setCondition] = useState<"All" | "Brand New" | "Okaza / Second Hand">("All");
   const [query, setQuery] = useState("");
+  const [place, setPlace] = useState<string>("All");
+  const [sort, setSort] = useState<"none" | "price" | "nearest">("none");
 
-  const filter = (items: Listing[]) =>
-    items.filter(
-      (l) =>
-        (condition === "All" || l.condition === condition) &&
-        (query.trim() === "" || l.title.toLowerCase().includes(query.toLowerCase())),
-    );
+  const filter = (items: Listing[]) => {
+    const out = items.filter((l) => {
+      if (condition !== "All" && l.condition !== condition) return false;
+      if (query.trim() !== "" && !l.title.toLowerCase().includes(query.toLowerCase())) return false;
+      if (place === "Hotels") return l.category === "hotels";
+      if (place === "Transport") return l.category === "transport";
+      if (place !== "All" && !l.location.includes(place)) return false;
+      return true;
+    });
+    if (sort === "price") return [...out].sort((a, b) => a.price - b.price);
+    if (sort === "nearest") {
+      const near = place === "All" || place === "Hotels" || place === "Transport" ? "Douala" : place;
+      return [...out].sort(
+        (a, b) => Number(b.location.includes(near)) - Number(a.location.includes(near)),
+      );
+    }
+    return out;
+  };
+
 
   return (
     <MallShell>
