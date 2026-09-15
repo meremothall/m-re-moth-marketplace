@@ -45,6 +45,7 @@ export const Route = createFileRoute("/search")({
 });
 
 function SearchPage() {
+  const { add: addWanted } = useWanted();
   const search = Route.useSearch();
   const [q, setQ] = useState(search.q ?? "");
   const [category, setCategory] = useState<CategoryId | "all">(search.category ?? "all");
