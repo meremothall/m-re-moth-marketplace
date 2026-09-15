@@ -22,6 +22,7 @@ import { Route as MeremothMallHomepageUiRouteImport } from './routes/meremoth-ma
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as WantedRouteImport } from './routes/wanted'
 import { Route as ChatSellerIdRouteImport } from './routes/chat.$sellerId'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
 
@@ -90,6 +91,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WantedRoute = WantedRouteImport.update({
+  id: '/wanted',
+  path: '/wanted',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChatSellerIdRoute = ChatSellerIdRouteImport.update({
   id: '/chat/$sellerId',
   path: '/chat/$sellerId',
@@ -115,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
+  '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
 }
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
+  '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
 }
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
+  '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
 }
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/search'
     | '/terms'
+    | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/search'
     | '/terms'
+    | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
   id:
@@ -203,6 +214,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/search'
     | '/terms'
+    | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
   fileRoutesById: FileRoutesById
@@ -221,6 +233,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   SearchRoute: typeof SearchRoute
   TermsRoute: typeof TermsRoute
+  WantedRoute: typeof WantedRoute
   ChatSellerIdRoute: typeof ChatSellerIdRoute
   ListingIdRoute: typeof ListingIdRoute
 }
@@ -318,6 +331,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wanted': {
+      id: '/wanted'
+      path: '/wanted'
+      fullPath: '/wanted'
+      preLoaderRoute: typeof WantedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/chat/$sellerId': {
       id: '/chat/$sellerId'
       path: '/chat/$sellerId'
@@ -349,6 +369,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   SearchRoute: SearchRoute,
   TermsRoute: TermsRoute,
+  WantedRoute: WantedRoute,
   ChatSellerIdRoute: ChatSellerIdRoute,
   ListingIdRoute: ListingIdRoute,
 }

@@ -1,7 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import * as Icons from "lucide-react";
-import { Heart, MapPin, Search, SlidersHorizontal, Star } from "lucide-react";
+import {
+  BadgeCheck,
+  Heart,
+  MapPin,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  Star,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,7 +17,9 @@ import { Input } from "@/components/ui/input";
 import { MallShell } from "@/components/mall/Chrome";
 import {
   CATEGORIES,
+  DOUALA_AREAS,
   LISTINGS,
+  SELLERS,
   TOP_PAINTERS,
   fcfa,
   listingsByCategory,
@@ -39,28 +49,69 @@ export const Route = createFileRoute("/")({
 });
 
 export function ListingCard({ listing }: { listing: Listing }) {
+  const seller = SELLERS[listing.sellerId];
+  const tierClass =
+    seller?.tier === "Gold"
+      ? "bg-amber-500 text-white"
+      : seller?.tier === "Blue"
+        ? "bg-sky-600 text-white"
+        : "bg-secondary text-secondary-foreground";
+
   return (
     <Card className="overflow-hidden rounded-2xl border-border shadow-sm transition hover:shadow-md">
       <Link to="/listing/$id" params={{ id: listing.id }}>
         <div className="relative flex h-28 items-center justify-center bg-secondary text-5xl">
           {listing.emoji}
-          {listing.sponsored && (
-            <Badge className="absolute left-2 top-2 bg-amber-500 text-white">Sponsored</Badge>
-          )}
+          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground shadow">
+            <ShieldCheck className="h-3 w-3" /> Escrow
+          </span>
           <Heart className="absolute right-2 top-2 h-5 w-5 text-muted-foreground" />
+          {listing.sponsored && (
+            <Badge className="absolute bottom-2 left-2 bg-amber-500 text-white">Sponsored</Badge>
+          )}
         </div>
         <CardContent className="space-y-1 p-3">
           <p className="line-clamp-2 text-sm font-semibold leading-tight">{listing.title}</p>
-          <p className="text-base font-bold text-primary">
+          <p className="text-base font-extrabold text-primary">
             {fcfa(listing.price)}
             {listing.priceUnit ?? ""}
           </p>
+          <div className="flex flex-wrap items-center gap-1">
+            <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground">
+              {listing.condition === "Service" ? "Service" : listing.condition}
+            </span>
+            <span className="text-[10px] text-muted-foreground">
+              {listing.stock ? `${listing.stock} in stock` : "In stock"}
+            </span>
+          </div>
+          {listing.amenities && (
+            <div className="flex flex-wrap gap-1 text-[10px] text-muted-foreground">
+              {listing.amenities.slice(0, 3).map((a) => (
+                <span key={a} className="rounded-full bg-secondary px-2 py-0.5">
+                  {a}
+                </span>
+              ))}
+            </div>
+          )}
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
             <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
             {listing.rating} · {listing.sold ? `${listing.sold} sold` : `${listing.reviews} reviews`}
           </div>
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="h-3 w-3" /> {listing.location}
+            <MapPin className="h-3 w-3 shrink-0" />
+            <span className="truncate">{listing.location}</span>
+          </div>
+          <div className="mt-1 border-t border-border pt-1">
+            <p className="truncate text-[11px] font-semibold">{seller?.name}</p>
+            <div className="mt-0.5 flex flex-wrap items-center gap-1">
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${tierClass}`}
+              >
+                <BadgeCheck className="h-3 w-3" />
+                {seller?.verified ? `Verified ${seller.tier}` : "Unverified"}
+              </span>
+              <span className="truncate text-[10px] text-muted-foreground">{seller?.area}</span>
+            </div>
           </div>
         </CardContent>
       </Link>
@@ -100,16 +151,33 @@ function Row({
   );
 }
 
+const PLACE_PILLS = ["All", "Akwa", "Bonapriso", "Bonaberi", "Deido", "Bonanjo", "Bali"] as const;
+
 function Home() {
   const [condition, setCondition] = useState<"All" | "Brand New" | "Okaza / Second Hand">("All");
   const [query, setQuery] = useState("");
+  const [place, setPlace] = useState<string>("All");
+  const [sort, setSort] = useState<"none" | "price" | "nearest">("none");
 
-  const filter = (items: Listing[]) =>
-    items.filter(
-      (l) =>
-        (condition === "All" || l.condition === condition) &&
-        (query.trim() === "" || l.title.toLowerCase().includes(query.toLowerCase())),
-    );
+  const filter = (items: Listing[]) => {
+    const out = items.filter((l) => {
+      if (condition !== "All" && l.condition !== condition) return false;
+      if (query.trim() !== "" && !l.title.toLowerCase().includes(query.toLowerCase())) return false;
+      if (place === "Hotels") return l.category === "hotels";
+      if (place === "Transport") return l.category === "transport";
+      if (place !== "All" && !l.location.includes(place)) return false;
+      return true;
+    });
+    if (sort === "price") return [...out].sort((a, b) => a.price - b.price);
+    if (sort === "nearest") {
+      const near = place === "All" || place === "Hotels" || place === "Transport" ? "Douala" : place;
+      return [...out].sort(
+        (a, b) => Number(b.location.includes(near)) - Number(a.location.includes(near)),
+      );
+    }
+    return out;
+  };
+
 
   return (
     <MallShell>
@@ -127,6 +195,36 @@ function Home() {
           <Link to="/search" aria-label="Filters">
             <SlidersHorizontal className="h-4 w-4" />
           </Link>
+        </Button>
+      </div>
+
+      <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1">
+        {[...PLACE_PILLS, "Hotels", "Transport"].map((p) => (
+          <Button
+            key={p}
+            size="sm"
+            variant={place === p ? "default" : "outline"}
+            className="shrink-0 rounded-full"
+            onClick={() => setPlace(p)}
+          >
+            {p}
+          </Button>
+        ))}
+        <Button
+          size="sm"
+          variant={sort === "price" ? "default" : "outline"}
+          className="shrink-0 rounded-full"
+          onClick={() => setSort(sort === "price" ? "none" : "price")}
+        >
+          Sort by: Price Low-High
+        </Button>
+        <Button
+          size="sm"
+          variant={sort === "nearest" ? "default" : "outline"}
+          className="shrink-0 rounded-full"
+          onClick={() => setSort(sort === "nearest" ? "none" : "nearest")}
+        >
+          Sort by: Nearest
         </Button>
       </div>
 
@@ -176,6 +274,16 @@ function Home() {
         title="Trending products"
         subtitle="Most viewed this week"
         items={filter(listingsByCategory("products"))}
+      />
+      <Row
+        title="Hotels & Short Stays"
+        subtitle="Price per night · escrow-protected 30% deposit"
+        items={filter(listingsByCategory("hotels"))}
+      />
+      <Row
+        title="Transportation"
+        subtitle="Cars, motos, trucks and bus tickets with verified drivers"
+        items={filter(listingsByCategory("transport"))}
       />
 
       <section className="mt-7">

@@ -4,16 +4,17 @@ import {
   Search,
   Plus,
   MessageCircle,
-  Headset,
   Leaf,
   User,
   ArrowLeft,
   Phone,
   Mail,
   MapPin,
+  Megaphone,
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { ADMIN, ADMIN_WA_LINK } from "@/lib/mall-data";
+import { NEW_WANTED_COUNT } from "@/lib/wanted";
 
 export function Logo({ size = 40 }: { size?: number }) {
   return (
@@ -123,15 +124,26 @@ export function WhatsAppWidget() {
       href={ADMIN_WA_LINK}
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-24 right-4 z-40 flex max-w-[220px] items-center gap-2 rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-lg transition hover:bg-primary/90"
+      aria-label={`Contact us on WhatsApp — ${ADMIN.handle} ${ADMIN.whatsapp}`}
+      title={`Contact us — ${ADMIN.handle} · ${ADMIN.whatsapp}`}
+      style={{ width: 56, height: 56, right: 20, bottom: 96, zIndex: 999 }}
+      className="fixed flex items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition hover:bg-primary/90"
     >
-      <MessageCircle className="h-5 w-5 shrink-0" />
-      <span className="leading-tight">
-        Contact us — {ADMIN.handle}
-        <br />
-        <span className="text-[11px] font-normal opacity-90">{ADMIN.whatsapp}</span>
-      </span>
+      <MessageCircle className="h-6 w-6" />
     </a>
+  );
+}
+
+export function WantedFab() {
+  return (
+    <Link
+      to="/wanted"
+      aria-label="Post a WANTED request"
+      style={{ right: 20, bottom: 164, zIndex: 999 }}
+      className="fixed inline-flex items-center gap-1 rounded-full bg-amber-500 px-3 py-2 text-xs font-bold text-white shadow-lg transition hover:bg-amber-600"
+    >
+      <Megaphone className="h-4 w-4" /> WANTED
+    </Link>
   );
 }
 
@@ -149,9 +161,14 @@ export function BottomNav() {
           <Home className="h-5 w-5" />
           Home
         </Link>
-        <Link to="/search" className={item(pathname.startsWith("/search"))}>
-          <Search className="h-5 w-5" />
-          Search
+        <Link to="/wanted" className={item(pathname.startsWith("/wanted"))}>
+          <span className="relative">
+            <Megaphone className="h-5 w-5" />
+            <span className="absolute -right-3 -top-2 rounded-full bg-amber-500 px-1 text-[9px] font-bold text-white">
+              {NEW_WANTED_COUNT}
+            </span>
+          </span>
+          Wanted
         </Link>
         <Link to="/add-listing" className="flex flex-1 flex-col items-center py-1">
           <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-md">
@@ -161,11 +178,11 @@ export function BottomNav() {
         </Link>
         <Link to="/inbox" className={item(pathname.startsWith("/inbox"))}>
           <MessageCircle className="h-5 w-5" />
-          Inbox
+          Chat
         </Link>
-        <Link to="/contact" className={item(pathname.startsWith("/contact"))}>
-          <Headset className="h-5 w-5" />
-          Contact us
+        <Link to="/dashboard" className={item(pathname.startsWith("/dashboard"))}>
+          <User className="h-5 w-5" />
+          Profile
         </Link>
       </div>
     </nav>
@@ -189,6 +206,7 @@ export function MallShell({
       <main className="mx-auto max-w-5xl px-4 py-5">{children}</main>
       <MallFooter />
       <WhatsAppWidget />
+      <WantedFab />
       <BottomNav />
     </div>
   );

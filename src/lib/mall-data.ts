@@ -34,7 +34,22 @@ export type CategoryId =
   | "vehicles"
   | "jobs"
   | "food"
-  | "education";
+  | "education"
+  | "hotels"
+  | "transport";
+
+export const DOUALA_AREAS = [
+  "Akwa",
+  "Bonapriso",
+  "Bonaberi",
+  "Deido",
+  "Bonanjo",
+  "Bali",
+  "Kotto",
+  "Bonamoussadi",
+  "Logbessou",
+  "Ndokoti",
+];
 
 export type Category = {
   id: CategoryId;
@@ -158,7 +173,25 @@ export const CATEGORIES: Category[] = [
       "Professional Training",
     ],
   },
+  {
+    id: "hotels",
+    name: "Hotels & Short Stays",
+    icon: "BedDouble",
+    count: "86 stays",
+    isNew: true,
+    subs: ["Hotel Room", "Guest House", "Short Stay Apartment", "Suite"],
+  },
+  {
+    id: "transport",
+    name: "Transportation",
+    icon: "Bus",
+    count: "140 options",
+    isNew: true,
+    subs: ["For Sale", "For Rent With Driver", "For Goods", "Ticket"],
+  },
 ];
+
+export type SellerTier = "Gold" | "Blue" | "Basic";
 
 export type Seller = {
   id: string;
@@ -167,6 +200,8 @@ export type Seller = {
   phone: string;
   verified: boolean;
   pro?: boolean;
+  tier: SellerTier;
+  area: string;
   country: string;
   flag: string;
   rating: number;
@@ -181,6 +216,8 @@ export const SELLERS: Record<string, Seller> = {
     phone: "+237 653 779 134",
     verified: true,
     pro: true,
+    tier: "Gold",
+    area: "Akwa, Douala",
     country: "Cameroon",
     flag: "🇨🇲",
     rating: 4.9,
@@ -188,11 +225,13 @@ export const SELLERS: Record<string, Seller> = {
   },
   s2: {
     id: "s2",
-    name: "Paul Mbarga — Painter",
+    name: "Paul Mbarga",
     phoneIntl: "237653779134",
     phone: "+237 653 779 134",
     verified: true,
     pro: true,
+    tier: "Gold",
+    area: "Bonamoussadi, Douala",
     country: "Cameroon",
     flag: "🇨🇲",
     rating: 4.9,
@@ -205,6 +244,8 @@ export const SELLERS: Record<string, Seller> = {
     phone: "+237 653 779 134",
     verified: true,
     pro: true,
+    tier: "Gold",
+    area: "Bonanjo, Douala",
     country: "Cameroon",
     flag: "🇨🇲",
     rating: 5,
@@ -216,6 +257,8 @@ export const SELLERS: Record<string, Seller> = {
     phoneIntl: "237653779134",
     phone: "+237 653 779 134",
     verified: true,
+    tier: "Blue",
+    area: "Bonaberi, Douala",
     country: "Cameroon",
     flag: "🇨🇲",
     rating: 4.7,
@@ -227,10 +270,39 @@ export const SELLERS: Record<string, Seller> = {
     phoneIntl: "237653779134",
     phone: "+237 653 779 134",
     verified: false,
+    tier: "Basic",
+    area: "Lagos, Nigeria",
     country: "Nigeria",
     flag: "🇳🇬",
     rating: 4.6,
     jobs: 210,
+  },
+  s6: {
+    id: "s6",
+    name: "Hotel Sawa Bonanjo",
+    phoneIntl: "237653779134",
+    phone: "+237 653 779 134",
+    verified: true,
+    pro: true,
+    tier: "Gold",
+    area: "Bonanjo, Douala",
+    country: "Cameroon",
+    flag: "🇨🇲",
+    rating: 4.8,
+    jobs: 96,
+  },
+  s7: {
+    id: "s7",
+    name: "Jean Tchoupo — Driver",
+    phoneIntl: "237653779134",
+    phone: "+237 653 779 134",
+    verified: true,
+    tier: "Blue",
+    area: "Deido, Douala",
+    country: "Cameroon",
+    flag: "🇨🇲",
+    rating: 4.7,
+    jobs: 148,
   },
 };
 
@@ -251,6 +323,11 @@ export type Listing = {
   description: string;
   specs: Record<string, string>;
   emoji: string;
+  stock?: number;
+  amenities?: string[];
+  stars?: number;
+  vehicleType?: "Car" | "Moto" | "Truck" | "Bus";
+  transportService?: "For Sale" | "For Rent With Driver" | "For Goods" | "Ticket";
   sponsored?: boolean;
   featured?: boolean;
 };
@@ -606,6 +683,140 @@ export const LISTINGS: Listing[] = [
     description: "Theory plus 20 practical lessons and licence processing support.",
     specs: { Lessons: "20", Duration: "8 weeks", Licence: "Category B" },
     emoji: "🚦",
+  },
+  {
+    id: "hotel-sawa-suite",
+    title: "Executive Suite — Hotel Sawa Bonanjo",
+    category: "hotels",
+    sub: "Suite",
+    price: 45000,
+    priceUnit: "/night",
+    condition: "Service",
+    location: "Douala, Bonanjo",
+    rating: 4.8,
+    reviews: 132,
+    sellerId: "s6",
+    description:
+      "Executive suite with king bed, air conditioning, free wifi and access to the pool. Breakfast included.",
+    specs: { Guests: "2", "Check-in": "14:00", Breakfast: "Included" },
+    emoji: "🏨",
+    stars: 4,
+    stock: 6,
+    amenities: ["Wifi", "AC", "Pool", "Breakfast"],
+    featured: true,
+  },
+  {
+    id: "hotel-akwa-room",
+    title: "Standard Room — Akwa Palace Area",
+    category: "hotels",
+    sub: "Hotel Room",
+    price: 22000,
+    priceUnit: "/night",
+    condition: "Service",
+    location: "Douala, Akwa",
+    rating: 4.5,
+    reviews: 87,
+    sellerId: "s6",
+    description: "Clean standard room in the heart of Akwa, walking distance to banks and markets.",
+    specs: { Guests: "2", "Check-in": "13:00", Parking: "Yes" },
+    emoji: "🛏️",
+    stars: 3,
+    stock: 12,
+    amenities: ["Wifi", "AC"],
+  },
+  {
+    id: "stay-bonapriso-apartment",
+    title: "Short Stay Apartment — Bonapriso",
+    category: "hotels",
+    sub: "Short Stay Apartment",
+    price: 35000,
+    priceUnit: "/night",
+    condition: "Service",
+    location: "Douala, Bonapriso",
+    rating: 4.7,
+    reviews: 41,
+    sellerId: "s4",
+    description: "Furnished 2-bedroom apartment with kitchen, generator backup and secure parking.",
+    specs: { Guests: "4", Bedrooms: "2", "Minimum stay": "2 nights" },
+    emoji: "🏙️",
+    stars: 4,
+    stock: 3,
+    amenities: ["Wifi", "AC", "Kitchen"],
+  },
+  {
+    id: "transport-car-rent",
+    title: "Toyota Corolla with Driver — Daily Hire",
+    category: "transport",
+    sub: "For Rent With Driver",
+    price: 30000,
+    priceUnit: "/day",
+    condition: "Service",
+    location: "Douala, Deido",
+    rating: 4.7,
+    reviews: 64,
+    sellerId: "s7",
+    description: "Air-conditioned car with a verified professional driver for city and out-of-town trips.",
+    specs: { Seats: "4", Driver: "Verified", Fuel: "Not included" },
+    emoji: "🚙",
+    vehicleType: "Car",
+    transportService: "For Rent With Driver",
+    stock: 4,
+  },
+  {
+    id: "transport-truck-goods",
+    title: "5-Ton Truck — Goods Transport",
+    category: "transport",
+    sub: "For Goods",
+    price: 55000,
+    priceUnit: "/day",
+    condition: "Service",
+    location: "Douala, Bonaberi",
+    rating: 4.6,
+    reviews: 38,
+    sellerId: "s7",
+    description: "Moving and cargo transport within Douala and to Yaounde, Buea and Bafoussam.",
+    specs: { Capacity: "5 tons", Loaders: "2 available", Coverage: "Cameroon wide" },
+    emoji: "🚚",
+    vehicleType: "Truck",
+    transportService: "For Goods",
+    stock: 2,
+  },
+  {
+    id: "transport-moto-rent",
+    title: "Moto Taxi — Weekly Rental",
+    category: "transport",
+    sub: "For Rent With Driver",
+    price: 8000,
+    priceUnit: "/day",
+    condition: "Service",
+    location: "Douala, Bali",
+    rating: 4.4,
+    reviews: 22,
+    sellerId: "s7",
+    description: "Reliable moto with helmet and verified rider for daily errands and deliveries.",
+    specs: { Helmet: "Included", Area: "Douala" },
+    emoji: "🛵",
+    vehicleType: "Moto",
+    transportService: "For Rent With Driver",
+    stock: 8,
+  },
+  {
+    id: "transport-bus-ticket",
+    title: "Bus Ticket — Douala to Yaounde",
+    category: "transport",
+    sub: "Ticket",
+    price: 6000,
+    condition: "Service",
+    location: "Douala, Bonaberi",
+    rating: 4.5,
+    reviews: 310,
+    sellerId: "s7",
+    description: "VIP bus ticket with AC, departures every hour from Bonaberi terminal.",
+    specs: { Duration: "3h30", Departures: "Hourly", Luggage: "20 kg" },
+    emoji: "🚌",
+    vehicleType: "Bus",
+    transportService: "Ticket",
+    stock: 40,
   },
 ];
 

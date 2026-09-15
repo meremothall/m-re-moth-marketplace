@@ -6,7 +6,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MallShell } from "@/components/mall/Chrome";
 import { ListingCard } from "./index";
-import { CATEGORIES, CITIES, LISTINGS, SELLERS, type CategoryId } from "@/lib/mall-data";
+import {
+  CATEGORIES,
+  CITIES,
+  DOUALA_AREAS,
+  LISTINGS,
+  SELLERS,
+  type CategoryId,
+} from "@/lib/mall-data";
+import { useWanted } from "@/lib/wanted";
+import { PostWantedDialog } from "./wanted";
 
 type SearchParams = { category?: CategoryId; q?: string };
 
@@ -36,6 +45,7 @@ export const Route = createFileRoute("/search")({
 });
 
 function SearchPage() {
+  const { add: addWanted } = useWanted();
   const search = Route.useSearch();
   const [q, setQ] = useState(search.q ?? "");
   const [category, setCategory] = useState<CategoryId | "all">(search.category ?? "all");
@@ -46,12 +56,18 @@ function SearchPage() {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [proOnly, setProOnly] = useState(false);
   const [internationalOnly, setInternationalOnly] = useState(false);
+  const [vehicleType, setVehicleType] = useState("All");
+  const [transportService, setTransportService] = useState("All");
 
   const results = LISTINGS.filter((l) => {
     const seller = SELLERS[l.sellerId]!;
     if (q && !`${l.title} ${l.sub} ${l.description}`.toLowerCase().includes(q.toLowerCase()))
       return false;
     if (category !== "all" && l.category !== category) return false;
+    if (category === "transport") {
+      if (vehicleType !== "All" && l.vehicleType !== vehicleType) return false;
+      if (transportService !== "All" && l.transportService !== transportService) return false;
+    }
     if (city !== "All" && !l.location.includes(city)) return false;
     if (condition !== "All" && l.condition !== condition) return false;
     if (min && l.price < Number(min)) return false;
@@ -86,8 +102,30 @@ function SearchPage() {
             </Chip>
           ))}
         </div>
+        {category === "transport" && (
+          <>
+            <div className="flex flex-wrap gap-2">
+              {["All", "Car", "Moto", "Truck", "Bus"].map((v) => (
+                <Chip key={v} active={vehicleType === v} onClick={() => setVehicleType(v)}>
+                  {v}
+                </Chip>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {["All", "For Sale", "For Rent With Driver", "For Goods", "Ticket"].map((s) => (
+                <Chip
+                  key={s}
+                  active={transportService === s}
+                  onClick={() => setTransportService(s)}
+                >
+                  {s}
+                </Chip>
+              ))}
+            </div>
+          </>
+        )}
         <div className="flex flex-wrap gap-2">
-          {["All", ...CITIES].map((c) => (
+          {["All", ...DOUALA_AREAS, ...CITIES].map((c) => (
             <Chip key={c} active={city === c} onClick={() => setCity(c)}>
               {c}
             </Chip>
@@ -130,9 +168,17 @@ function SearchPage() {
         ))}
       </div>
       {results.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          No listing matches these filters yet.
-        </p>
+        <div className="space-y-3 py-10 text-center">
+          <p className="text-muted-foreground">No listing matches these filters yet.</p>
+          <PostWantedDialog
+            onSubmit={addWanted}
+            trigger={
+              <Button className="rounded-2xl bg-amber-500 text-white hover:bg-amber-600">
+                Can&apos;t find it? Post WANTED Request
+              </Button>
+            }
+          />
+        </div>
       )}
     </MallShell>
   );
