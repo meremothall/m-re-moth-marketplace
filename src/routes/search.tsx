@@ -46,12 +46,18 @@ function SearchPage() {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [proOnly, setProOnly] = useState(false);
   const [internationalOnly, setInternationalOnly] = useState(false);
+  const [vehicleType, setVehicleType] = useState("All");
+  const [transportService, setTransportService] = useState("All");
 
   const results = LISTINGS.filter((l) => {
     const seller = SELLERS[l.sellerId]!;
     if (q && !`${l.title} ${l.sub} ${l.description}`.toLowerCase().includes(q.toLowerCase()))
       return false;
     if (category !== "all" && l.category !== category) return false;
+    if (category === "transport") {
+      if (vehicleType !== "All" && l.vehicleType !== vehicleType) return false;
+      if (transportService !== "All" && l.transportService !== transportService) return false;
+    }
     if (city !== "All" && !l.location.includes(city)) return false;
     if (condition !== "All" && l.condition !== condition) return false;
     if (min && l.price < Number(min)) return false;
