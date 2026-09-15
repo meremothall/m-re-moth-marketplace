@@ -173,7 +173,25 @@ export const CATEGORIES: Category[] = [
       "Professional Training",
     ],
   },
+  {
+    id: "hotels",
+    name: "Hotels & Short Stays",
+    icon: "BedDouble",
+    count: "86 stays",
+    isNew: true,
+    subs: ["Hotel Room", "Guest House", "Short Stay Apartment", "Suite"],
+  },
+  {
+    id: "transport",
+    name: "Transportation",
+    icon: "Bus",
+    count: "140 options",
+    isNew: true,
+    subs: ["For Sale", "For Rent With Driver", "For Goods", "Ticket"],
+  },
 ];
+
+export type SellerTier = "Gold" | "Blue" | "Basic";
 
 export type Seller = {
   id: string;
@@ -182,6 +200,8 @@ export type Seller = {
   phone: string;
   verified: boolean;
   pro?: boolean;
+  tier: SellerTier;
+  area: string;
   country: string;
   flag: string;
   rating: number;
