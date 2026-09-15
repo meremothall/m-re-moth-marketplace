@@ -323,6 +323,11 @@ export type Listing = {
   description: string;
   specs: Record<string, string>;
   emoji: string;
+  stock?: number;
+  amenities?: string[];
+  stars?: number;
+  vehicleType?: "Car" | "Moto" | "Truck" | "Bus";
+  transportService?: "For Sale" | "For Rent With Driver" | "For Goods" | "Ticket";
   sponsored?: boolean;
   featured?: boolean;
 };
