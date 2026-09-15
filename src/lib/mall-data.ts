@@ -34,7 +34,22 @@ export type CategoryId =
   | "vehicles"
   | "jobs"
   | "food"
-  | "education";
+  | "education"
+  | "hotels"
+  | "transport";
+
+export const DOUALA_AREAS = [
+  "Akwa",
+  "Bonapriso",
+  "Bonaberi",
+  "Deido",
+  "Bonanjo",
+  "Bali",
+  "Kotto",
+  "Bonamoussadi",
+  "Logbessou",
+  "Ndokoti",
+];
 
 export type Category = {
   id: CategoryId;
