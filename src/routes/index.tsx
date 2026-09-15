@@ -198,6 +198,36 @@ function Home() {
         </Button>
       </div>
 
+      <div className="-mx-4 mt-3 flex gap-2 overflow-x-auto px-4 pb-1">
+        {[...PLACE_PILLS, "Hotels", "Transport"].map((p) => (
+          <Button
+            key={p}
+            size="sm"
+            variant={place === p ? "default" : "outline"}
+            className="shrink-0 rounded-full"
+            onClick={() => setPlace(p)}
+          >
+            {p}
+          </Button>
+        ))}
+        <Button
+          size="sm"
+          variant={sort === "price" ? "default" : "outline"}
+          className="shrink-0 rounded-full"
+          onClick={() => setSort(sort === "price" ? "none" : "price")}
+        >
+          Sort by: Price Low-High
+        </Button>
+        <Button
+          size="sm"
+          variant={sort === "nearest" ? "default" : "outline"}
+          className="shrink-0 rounded-full"
+          onClick={() => setSort(sort === "nearest" ? "none" : "nearest")}
+        >
+          Sort by: Nearest
+        </Button>
+      </div>
+
       <div className="mt-3 flex flex-wrap gap-2">
         {(["All", "Brand New", "Okaza / Second Hand"] as const).map((c) => (
           <Button
