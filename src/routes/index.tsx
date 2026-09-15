@@ -1,7 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import * as Icons from "lucide-react";
-import { Heart, MapPin, Search, SlidersHorizontal, Star } from "lucide-react";
+import {
+  BadgeCheck,
+  Heart,
+  MapPin,
+  Search,
+  ShieldCheck,
+  SlidersHorizontal,
+  Star,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
