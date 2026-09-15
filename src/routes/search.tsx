@@ -92,8 +92,30 @@ function SearchPage() {
             </Chip>
           ))}
         </div>
+        {category === "transport" && (
+          <>
+            <div className="flex flex-wrap gap-2">
+              {["All", "Car", "Moto", "Truck", "Bus"].map((v) => (
+                <Chip key={v} active={vehicleType === v} onClick={() => setVehicleType(v)}>
+                  {v}
+                </Chip>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {["All", "For Sale", "For Rent With Driver", "For Goods", "Ticket"].map((s) => (
+                <Chip
+                  key={s}
+                  active={transportService === s}
+                  onClick={() => setTransportService(s)}
+                >
+                  {s}
+                </Chip>
+              ))}
+            </div>
+          </>
+        )}
         <div className="flex flex-wrap gap-2">
-          {["All", ...CITIES].map((c) => (
+          {["All", ...DOUALA_AREAS, ...CITIES].map((c) => (
             <Chip key={c} active={city === c} onClick={() => setCity(c)}>
               {c}
             </Chip>
