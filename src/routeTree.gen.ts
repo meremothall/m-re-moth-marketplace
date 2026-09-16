@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BecomeSellerRouteImport } from './routes/become-seller'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as FindForMeRouteImport } from './routes/find-for-me'
 import { Route as InboxRouteImport } from './routes/inbox'
 import { Route as MeremothMallHomepageUiRouteImport } from './routes/meremoth-mall-homepage-ui'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -64,6 +65,11 @@ const ContactRoute = ContactRouteImport.update({
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FindForMeRoute = FindForMeRouteImport.update({
+  id: '/find-for-me',
+  path: '/find-for-me',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InboxRoute = InboxRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/find-for-me': typeof FindForMeRoute
   '/inbox': typeof InboxRoute
   '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
@@ -134,6 +141,7 @@ export interface FileRoutesByTo {
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/find-for-me': typeof FindForMeRoute
   '/inbox': typeof InboxRoute
   '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
@@ -153,6 +161,7 @@ export interface FileRoutesById {
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
   '/dashboard': typeof DashboardRoute
+  '/find-for-me': typeof FindForMeRoute
   '/inbox': typeof InboxRoute
   '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
@@ -173,6 +182,7 @@ export interface FileRouteTypes {
     | '/become-seller'
     | '/contact'
     | '/dashboard'
+    | '/find-for-me'
     | '/inbox'
     | '/meremoth-mall-homepage-ui'
     | '/pricing'
@@ -191,6 +201,7 @@ export interface FileRouteTypes {
     | '/become-seller'
     | '/contact'
     | '/dashboard'
+    | '/find-for-me'
     | '/inbox'
     | '/meremoth-mall-homepage-ui'
     | '/pricing'
@@ -209,6 +220,7 @@ export interface FileRouteTypes {
     | '/become-seller'
     | '/contact'
     | '/dashboard'
+    | '/find-for-me'
     | '/inbox'
     | '/meremoth-mall-homepage-ui'
     | '/pricing'
@@ -228,6 +240,7 @@ export interface RootRouteChildren {
   BecomeSellerRoute: typeof BecomeSellerRoute
   ContactRoute: typeof ContactRoute
   DashboardRoute: typeof DashboardRoute
+  FindForMeRoute: typeof FindForMeRoute
   InboxRoute: typeof InboxRoute
   MeremothMallHomepageUiRoute: typeof MeremothMallHomepageUiRoute
   PricingRoute: typeof PricingRoute
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/find-for-me': {
+      id: '/find-for-me'
+      path: '/find-for-me'
+      fullPath: '/find-for-me'
+      preLoaderRoute: typeof FindForMeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inbox': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   BecomeSellerRoute: BecomeSellerRoute,
   ContactRoute: ContactRoute,
   DashboardRoute: DashboardRoute,
+  FindForMeRoute: FindForMeRoute,
   InboxRoute: InboxRoute,
   MeremothMallHomepageUiRoute: MeremothMallHomepageUiRoute,
   PricingRoute: PricingRoute,

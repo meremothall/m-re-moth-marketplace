@@ -2,20 +2,12 @@ export const ADMIN = {
   name: "Eceo Admin",
   role: "Founder & CEO",
   handle: "meremoth admin",
-  whatsapp: "653779134",
-  whatsappIntl: "237653779134",
   email: "support@meremothmall.com",
   location: "Douala, Cameroon",
   timezone: "Africa/Douala",
   hours: "8AM - 9PM everyday",
 };
 
-export const ADMIN_WA_LINK =
-  "https://wa.me/237653779134?text=Hello%20meremoth%20admin%20Eceo%20from%20meremoth%20mall";
-
-export function waLink(phoneIntl: string, text: string) {
-  return `https://wa.me/${phoneIntl}?text=${encodeURIComponent(text)}`;
-}
 
 export function fcfa(n: number) {
   return new Intl.NumberFormat("fr-FR").format(n) + " FCFA";
@@ -594,7 +586,7 @@ export const LISTINGS: Listing[] = [
   },
   {
     id: "job-driver",
-    title: "Company Driver Wanted — Douala",
+    title: "Company Driver Needed — Douala",
     category: "jobs",
     sub: "Job Offer",
     price: 120000,

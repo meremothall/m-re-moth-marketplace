@@ -7,6 +7,8 @@ import {
   MapPin,
   Search,
   ShieldCheck,
+  Megaphone,
+  MessageCircle,
   SlidersHorizontal,
   Star,
 } from "lucide-react";
@@ -15,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { MallShell } from "@/components/mall/Chrome";
+import { CheckoutDrawer } from "@/components/mall/CheckoutDrawer";
 import {
   CATEGORIES,
   DOUALA_AREAS,
@@ -39,7 +42,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "9 categories, verified Cameroonian sellers, WhatsApp ordering and secure escrow. Contact meremoth admin on 653779134.",
+          "Verified Cameroonian sellers, in-app chat, and secure escrow shopping across Douala.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -50,71 +53,36 @@ export const Route = createFileRoute("/")({
 
 export function ListingCard({ listing }: { listing: Listing }) {
   const seller = SELLERS[listing.sellerId];
-  const tierClass =
-    seller?.tier === "Gold"
-      ? "bg-amber-500 text-white"
-      : seller?.tier === "Blue"
-        ? "bg-sky-600 text-white"
-        : "bg-secondary text-secondary-foreground";
+  const tierClass = seller?.tier === "Gold" ? "text-amber-600" : seller?.tier === "Blue" ? "text-sky-600" : "text-muted-foreground";
 
   return (
-    <Card className="overflow-hidden rounded-2xl border-border shadow-sm transition hover:shadow-md">
+    <Card className="overflow-hidden border-border shadow-sm transition hover:shadow-md">
       <Link to="/listing/$id" params={{ id: listing.id }}>
         <div className="relative flex h-28 items-center justify-center bg-secondary text-5xl">
           {listing.emoji}
-          <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground shadow">
-            <ShieldCheck className="h-3 w-3" /> Escrow
-          </span>
+          <span className="absolute left-2 top-2 rounded-md bg-primary px-2 py-1 text-[10px] font-bold text-primary-foreground shadow">✓ Escrow Protected</span>
           <Heart className="absolute right-2 top-2 h-5 w-5 text-muted-foreground" />
-          {listing.sponsored && (
-            <Badge className="absolute bottom-2 left-2 bg-amber-500 text-white">Sponsored</Badge>
-          )}
+          {listing.sponsored && <Badge className="absolute bottom-2 left-2 bg-amber-500 text-primary-foreground">Sponsored</Badge>}
         </div>
-        <CardContent className="space-y-1 p-3">
-          <p className="line-clamp-2 text-sm font-semibold leading-tight">{listing.title}</p>
-          <p className="text-base font-extrabold text-primary">
-            {fcfa(listing.price)}
-            {listing.priceUnit ?? ""}
-          </p>
-          <div className="flex flex-wrap items-center gap-1">
-            <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px] font-medium text-secondary-foreground">
-              {listing.condition === "Service" ? "Service" : listing.condition}
-            </span>
-            <span className="text-[10px] text-muted-foreground">
-              {listing.stock ? `${listing.stock} in stock` : "In stock"}
-            </span>
-          </div>
-          {listing.amenities && (
-            <div className="flex flex-wrap gap-1 text-[10px] text-muted-foreground">
-              {listing.amenities.slice(0, 3).map((a) => (
-                <span key={a} className="rounded-full bg-secondary px-2 py-0.5">
-                  {a}
-                </span>
-              ))}
-            </div>
-          )}
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-            {listing.rating} · {listing.sold ? `${listing.sold} sold` : `${listing.reviews} reviews`}
-          </div>
-          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <MapPin className="h-3 w-3 shrink-0" />
-            <span className="truncate">{listing.location}</span>
-          </div>
-          <div className="mt-1 border-t border-border pt-1">
-            <p className="truncate text-[11px] font-semibold">{seller?.name}</p>
-            <div className="mt-0.5 flex flex-wrap items-center gap-1">
-              <span
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-semibold ${tierClass}`}
-              >
-                <BadgeCheck className="h-3 w-3" />
-                {seller?.verified ? `Verified ${seller.tier}` : "Unverified"}
-              </span>
-              <span className="truncate text-[10px] text-muted-foreground">{seller?.area}</span>
-            </div>
-          </div>
-        </CardContent>
       </Link>
+      <CardContent className="space-y-2 p-3">
+        <Link to="/listing/$id" params={{ id: listing.id }} className="block">
+          <p className="line-clamp-2 text-sm font-semibold leading-tight">{listing.title}</p>
+          <p className="mt-1 text-base font-extrabold text-foreground">{fcfa(listing.price)}{listing.priceUnit ?? ""}</p>
+        </Link>
+        <p className="line-clamp-2 text-[11px] font-semibold">
+          {seller?.name} <span className={tierClass}>✓ {seller?.tier}</span> · <span className="text-muted-foreground">{seller?.area}</span>
+        </p>
+        <div className="flex flex-wrap items-center gap-1 text-[10px] text-muted-foreground">
+          <span className="rounded-full bg-secondary px-2 py-0.5 text-secondary-foreground">{listing.condition}</span>
+          <span>{listing.stock ? `${listing.stock} in stock` : "In stock"}</span>
+        </div>
+        {listing.amenities && <div className="flex flex-wrap gap-1 text-[10px] text-muted-foreground">{listing.amenities.slice(0,3).map((a)=><span key={a} className="rounded-full bg-secondary px-2 py-0.5">{a}</span>)}</div>}
+        <div className="flex gap-2 pt-1">
+          <Button asChild size="sm" variant="outline" className="min-w-0 flex-1 rounded-lg px-2 text-xs"><Link to="/chat/$sellerId" params={{ sellerId: seller?.id ?? listing.sellerId }}><MessageCircle className="mr-1 h-3.5 w-3.5" />Chat Seller</Link></Button>
+          <CheckoutDrawer listing={listing} />
+        </div>
+      </CardContent>
     </Card>
   );
 }
@@ -245,6 +213,11 @@ function Home() {
       <section className="mt-6">
         <h2 className="mb-3 text-lg font-bold">Categories</h2>
         <div className="grid grid-cols-3 gap-3">
+          <Link to="/find-for-me" className="relative flex flex-col items-center gap-1 rounded-2xl bg-card p-3 text-center shadow-sm transition hover:shadow-md">
+            <Badge className="absolute -right-1 -top-2 bg-amber-500 text-primary-foreground"><Megaphone className="mr-1 h-3 w-3" />Find For Me</Badge>
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary"><Megaphone className="h-5 w-5 text-amber-600" /></span>
+            <span className="text-xs font-semibold leading-tight">Find For Me</span><span className="text-[10px] text-muted-foreground">12 new</span>
+          </Link>
           {CATEGORIES.map((c) => {
             const Icon = (Icons as unknown as Record<string, Icons.LucideIcon>)[c.icon] ?? Icons.Tag;
             return (
@@ -327,7 +300,7 @@ function Home() {
         items={filter(listingsByCategory("real-estate"))}
       />
       <Row title="Latest Vehicles" items={filter(listingsByCategory("vehicles"))} />
-      <Row title="Latest Jobs" items={filter(listingsByCategory("jobs"))} />
+      <section className="mt-7"><div className="mb-2 flex items-end justify-between"><h2 className="text-lg font-bold">Jobs</h2><Link to="/jobs" className="text-sm text-primary hover:underline">Job Offers · Find Talent</Link></div><Row title="Latest Job Offers" items={filter(listingsByCategory("jobs"))} /></section>
       <Row title="Food & Restaurants" items={filter(listingsByCategory("food"))} />
       <Row title="Education & Training" items={filter(listingsByCategory("education"))} />
       <Row title="Services near you" items={filter(listingsByCategory("services"))} />
