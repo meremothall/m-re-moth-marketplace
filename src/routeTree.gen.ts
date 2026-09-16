@@ -19,6 +19,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as FindForMeRouteImport } from './routes/find-for-me'
 import { Route as InboxRouteImport } from './routes/inbox'
+import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as MeremothMallHomepageUiRouteImport } from './routes/meremoth-mall-homepage-ui'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SearchRouteImport } from './routes/search'
@@ -77,6 +78,11 @@ const InboxRoute = InboxRouteImport.update({
   path: '/inbox',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobsRoute = JobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MeremothMallHomepageUiRoute = MeremothMallHomepageUiRouteImport.update({
   id: '/meremoth-mall-homepage-ui',
   path: '/meremoth-mall-homepage-ui',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/find-for-me': typeof FindForMeRoute
   '/inbox': typeof InboxRoute
+  '/jobs': typeof JobsRoute
   '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
@@ -143,6 +150,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/find-for-me': typeof FindForMeRoute
   '/inbox': typeof InboxRoute
+  '/jobs': typeof JobsRoute
   '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
@@ -163,6 +171,7 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/find-for-me': typeof FindForMeRoute
   '/inbox': typeof InboxRoute
+  '/jobs': typeof JobsRoute
   '/meremoth-mall-homepage-ui': typeof MeremothMallHomepageUiRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
@@ -184,6 +193,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/find-for-me'
     | '/inbox'
+    | '/jobs'
     | '/meremoth-mall-homepage-ui'
     | '/pricing'
     | '/search'
@@ -203,6 +213,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/find-for-me'
     | '/inbox'
+    | '/jobs'
     | '/meremoth-mall-homepage-ui'
     | '/pricing'
     | '/search'
@@ -222,6 +233,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/find-for-me'
     | '/inbox'
+    | '/jobs'
     | '/meremoth-mall-homepage-ui'
     | '/pricing'
     | '/search'
@@ -242,6 +254,7 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   FindForMeRoute: typeof FindForMeRoute
   InboxRoute: typeof InboxRoute
+  JobsRoute: typeof JobsRoute
   MeremothMallHomepageUiRoute: typeof MeremothMallHomepageUiRoute
   PricingRoute: typeof PricingRoute
   SearchRoute: typeof SearchRoute
@@ -323,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InboxRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/jobs': {
+      id: '/jobs'
+      path: '/jobs'
+      fullPath: '/jobs'
+      preLoaderRoute: typeof JobsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/meremoth-mall-homepage-ui': {
       id: '/meremoth-mall-homepage-ui'
       path: '/meremoth-mall-homepage-ui'
@@ -386,6 +406,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   FindForMeRoute: FindForMeRoute,
   InboxRoute: InboxRoute,
+  JobsRoute: JobsRoute,
   MeremothMallHomepageUiRoute: MeremothMallHomepageUiRoute,
   PricingRoute: PricingRoute,
   SearchRoute: SearchRoute,
