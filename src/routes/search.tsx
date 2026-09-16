@@ -14,8 +14,8 @@ import {
   SELLERS,
   type CategoryId,
 } from "@/lib/mall-data";
-import { useWanted } from "@/lib/wanted";
-import { PostWantedDialog } from "./wanted";
+import { useFindForMe } from "@/lib/find-for-me";
+import { PostFindForMeDialog } from "./find-for-me";
 
 type SearchParams = { category?: CategoryId; q?: string };
 
@@ -45,7 +45,7 @@ export const Route = createFileRoute("/search")({
 });
 
 function SearchPage() {
-  const { add: addWanted } = useWanted();
+  const { add: addFindForMe } = useFindForMe();
   const search = Route.useSearch();
   const [q, setQ] = useState(search.q ?? "");
   const [category, setCategory] = useState<CategoryId | "all">(search.category ?? "all");
@@ -170,11 +170,11 @@ function SearchPage() {
       {results.length === 0 && (
         <div className="space-y-3 py-10 text-center">
           <p className="text-muted-foreground">No listing matches these filters yet.</p>
-          <PostWantedDialog
-            onSubmit={addWanted}
+          <PostFindForMeDialog
+            onSubmit={addFindForMe}
             trigger={
               <Button className="rounded-2xl bg-amber-500 text-white hover:bg-amber-600">
-                Can&apos;t find it? Post WANTED Request
+                Can&apos;t find it? Post on Find For Me
               </Button>
             }
           />

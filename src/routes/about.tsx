@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { MallShell, AdminStrip } from "@/components/mall/Chrome";
+import { MallShell } from "@/components/mall/Chrome";
 import { CATEGORIES } from "@/lib/mall-data";
 
 export const Route = createFileRoute("/about")({
@@ -30,7 +30,7 @@ function AboutPage() {
       <p className="mt-2 text-sm text-muted-foreground">
         Built in Douala for Cameroon, Open to the World — Proudly Cameroonian. Meremoth Mall is one
         marketplace where you can buy anything, hire anyone and sell to buyers at home and abroad,
-        with WhatsApp contact on every listing and secure escrow payment in FCFA.
+        with private in-app chat on every listing and secure escrow payment in FCFA.
       </p>
 
       <div className="mt-6 grid gap-3">
@@ -54,9 +54,6 @@ function AboutPage() {
           Give every Cameroonian trader, artisan, consultant and farmer a trusted online shopfront —
           and let buyers anywhere in the world reach them safely.
         </p>
-        <div className="mt-3">
-          <AdminStrip />
-        </div>
       </div>
     </MallShell>
   );

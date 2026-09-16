@@ -78,12 +78,12 @@ function BecomeSeller() {
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="wa">WhatsApp Number</Label>
+          <Label htmlFor="phone">Phone Number</Label>
           <div className="flex gap-2">
             <span className="flex items-center rounded-xl border border-input px-3 text-sm">
               {code}
             </span>
-            <Input id="wa" type="tel" required maxLength={20} placeholder="653779134" />
+            <Input id="phone" type="tel" required maxLength={20} placeholder="653779134" />
           </div>
         </div>
 

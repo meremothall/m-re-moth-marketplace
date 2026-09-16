@@ -27,7 +27,7 @@ export const Route = createFileRoute("/pricing")({
 });
 
 const PLANS = [
-  { name: "Free Plan", price: "0 FCFA", features: ["3 listings", "WhatsApp contact button", "Basic support"] },
+  { name: "Free Plan", price: "0 FCFA", features: ["3 listings", "In-app buyer chat", "Basic support"] },
   {
     name: "Basic",
     price: "5,000 FCFA/month",
@@ -41,7 +41,7 @@ const PLANS = [
       "Unlimited listings",
       "Green PRO badge",
       "Top search placement",
-      "WhatsApp button",
+      "Priority in-app chat",
       "Verified after ID check",
     ],
   },

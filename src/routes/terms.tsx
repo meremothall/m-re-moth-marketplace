@@ -49,7 +49,7 @@ const SECTIONS: { title: string; body: string }[] = [
   },
   {
     title: "7. Disputes",
-    body: "Report any issue to meremoth admin on WhatsApp 653779134 or support@meremothmall.com within 7 days of delivery. Escrow funds stay held until the dispute is resolved.",
+    body: "Report any issue through in-app support or support@meremothmall.com within 7 days of delivery. Escrow funds stay held until the dispute is resolved.",
   },
 ];
 

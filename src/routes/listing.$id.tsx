@@ -3,9 +3,7 @@ import { useState } from "react";
 import {
   CalendarDays,
   MapPin,
-  MessageCircle,
   MessageSquare,
-  Phone,
   Send,
   ShieldCheck,
   Star,
@@ -25,7 +23,8 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { MallShell } from "@/components/mall/Chrome";
-import { LISTINGS, SELLERS, fcfa, getListing, usd, waLink } from "@/lib/mall-data";
+import { LISTINGS, SELLERS, fcfa, getListing, usd } from "@/lib/mall-data";
+import { CheckoutDrawer } from "@/components/mall/CheckoutDrawer";
 
 export const Route = createFileRoute("/listing/$id")({
   loader: ({ params }) => {
@@ -39,7 +38,7 @@ export const Route = createFileRoute("/listing/$id")({
     }
     const l = loaderData.listing;
     const title = `${l.title} — ${fcfa(l.price)} | Meremoth Mall`;
-    const description = `${l.description} Located in ${l.location}. Contact the seller on WhatsApp through Meremoth Mall.`;
+    const description = `${l.description} Located in ${l.location}. Contact the seller privately through Meremoth Mall in-app chat.`;
     return {
       meta: [
         { title },
@@ -64,10 +63,6 @@ function ListingPage() {
 
   const isPro = listing.category === "consultants" || listing.category === "builders";
   const priceText = `${fcfa(listing.price)}${listing.priceUnit ?? ""}`;
-  const wa = waLink(
-    seller.phoneIntl,
-    `Hello, I am interested in ${listing.title} on meremoth mall. Price ${priceText}`,
-  );
   const related = LISTINGS.filter(
     (l) => l.category === listing.category && l.id !== listing.id,
   ).slice(0, 4);
@@ -188,25 +183,10 @@ function ListingPage() {
       <section className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
         <h2 className="text-lg font-bold">Get in Touch — Contact Seller</h2>
         <div className="mt-3 grid gap-2">
-          <Button asChild className="rounded-2xl">
-            <a href={wa} target="_blank" rel="noreferrer">
-              <MessageCircle className="mr-2 h-4 w-4" /> WhatsApp Seller
-            </a>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="rounded-2xl border-blue-500 text-blue-600 hover:bg-blue-50"
-          >
-            <a href={`tel:+${seller.phoneIntl}`}>
-              <Phone className="mr-2 h-4 w-4" /> Call Seller
-            </a>
-          </Button>
-          <Button asChild variant="outline" className="rounded-2xl">
-            <Link to="/chat/$sellerId" params={{ sellerId: seller.id }}>
-              <MessageSquare className="mr-2 h-4 w-4" /> Chat on meremoth mall
-            </Link>
-          </Button>
+          <div className="grid grid-cols-2 gap-2">
+            <Button asChild variant="outline"><Link to="/chat/$sellerId" params={{ sellerId: seller.id }}><MessageSquare className="mr-2 h-4 w-4" />Chat Seller</Link></Button>
+            <CheckoutDrawer listing={listing} />
+          </div>
           <Button variant="outline" className="rounded-2xl" onClick={() => setQuoteOpen(true)}>
             Request Quote / Request Service
           </Button>
@@ -251,7 +231,7 @@ function ListingPage() {
           <DialogHeader>
             <DialogTitle>Request Quote / Request Service</DialogTitle>
             <DialogDescription>
-              Sent to the seller inbox, plus email and WhatsApp notification.
+              Sent privately to the seller inbox.
             </DialogDescription>
           </DialogHeader>
           <form

@@ -85,9 +85,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Meremoth Mall: products, services, consultants, builders, real estate, vehicles, jobs, food and education. Contact meremoth admin on WhatsApp 653779134.",
+          "Meremoth Mall: products, services, consultants, builders, real estate, vehicles, jobs, food and education with secure in-app shopping.",
       },
-      { name: "author", content: "Eceo Admin — Founder & CEO, meremoth mall" },
       { property: "og:site_name", content: "Meremoth Mall" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
