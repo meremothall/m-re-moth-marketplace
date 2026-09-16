@@ -33,12 +33,13 @@ const FLOAT_KEY = "meremoth-sell-position";
 export function DraggableSellButton() {
   const [position, setPosition] = useState<Point | null>(null);
   const drag = useRef<{ dx: number; dy: number; moved: boolean } | null>(null);
+  const blockClick = useRef(false);
   useEffect(() => { try { const saved = localStorage.getItem(FLOAT_KEY); if (saved) setPosition(JSON.parse(saved) as Point); } catch { /* unavailable */ } }, []);
   const clamp = (x: number, y: number) => ({ x: Math.max(8, Math.min(window.innerWidth - 53, x)), y: Math.max(72, Math.min(window.innerHeight - 126, y)) });
   const onPointerDown = (e: PointerEvent<HTMLAnchorElement>) => { const r=e.currentTarget.getBoundingClientRect(); drag.current={dx:e.clientX-r.left,dy:e.clientY-r.top,moved:false}; e.currentTarget.setPointerCapture(e.pointerId); };
   const onPointerMove = (e: PointerEvent<HTMLAnchorElement>) => { if(!drag.current) return; drag.current.moved=true; setPosition(clamp(e.clientX-drag.current.dx,e.clientY-drag.current.dy)); };
-  const onPointerUp = () => { if(position) try { localStorage.setItem(FLOAT_KEY, JSON.stringify(position)); } catch { /* unavailable */ } drag.current=null; };
-  return <Link to="/add-listing" aria-label="Sell an item" title="Drag to move" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onClick={(e) => { if(drag.current?.moved) e.preventDefault(); }} style={position ? { left: position.x, top: position.y } : { right: 16, bottom: 88 }} className="fixed z-50 flex h-11 w-11 touch-none items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg"><Plus className="h-5 w-5" /></Link>;
+  const onPointerUp = () => { blockClick.current=Boolean(drag.current?.moved); if(position) try { localStorage.setItem(FLOAT_KEY, JSON.stringify(position)); } catch { /* unavailable */ } drag.current=null; };
+  return <Link to="/add-listing" aria-label="Sell an item" title="Drag to move" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onClick={(e) => { if(blockClick.current) { e.preventDefault(); blockClick.current=false; } }} style={position ? { left: position.x, top: position.y } : { right: 16, bottom: 88 }} className="fixed z-50 flex h-11 w-11 touch-none items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg"><Plus className="h-5 w-5" /></Link>;
 }
 
 export function BottomNav() {
