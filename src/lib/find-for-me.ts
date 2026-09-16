@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-export type WantedRequest = {
+export type FindForMeRequest = {
   id: string;
   product: string;
   description: string;
@@ -15,10 +15,10 @@ export type WantedRequest = {
   isNew?: boolean;
 };
 
-const KEY = "meremoth-wanted-requests";
+const KEY = "meremoth-find-for-me-requests";
 const HOUR = 3600_000;
 
-export const SEED_WANTED: WantedRequest[] = [
+export const SEED_FIND_FOR_ME: FindForMeRequest[] = [
   {
     id: "w1",
     product: "50 bags of cement (Dangote)",
@@ -71,17 +71,17 @@ export const SEED_WANTED: WantedRequest[] = [
   },
 ];
 
-export const NEW_WANTED_COUNT = 12;
+export const NEW_FIND_FOR_ME_COUNT = 12;
 
-function read(): WantedRequest[] {
-  if (typeof window === "undefined") return SEED_WANTED;
+function read(): FindForMeRequest[] {
+  if (typeof window === "undefined") return SEED_FIND_FOR_ME;
   try {
     const raw = window.localStorage.getItem(KEY);
-    if (!raw) return SEED_WANTED;
-    const parsed = JSON.parse(raw) as WantedRequest[];
-    return [...parsed, ...SEED_WANTED];
+    if (!raw) return SEED_FIND_FOR_ME;
+    const parsed = JSON.parse(raw) as FindForMeRequest[];
+    return [...parsed, ...SEED_FIND_FOR_ME];
   } catch {
-    return SEED_WANTED;
+    return SEED_FIND_FOR_ME;
   }
 }
 
@@ -93,15 +93,15 @@ export function timeAgo(ts: number) {
   return `${Math.round(hrs / 24)}d ago`;
 }
 
-export function useWanted() {
-  const [items, setItems] = useState<WantedRequest[]>(SEED_WANTED);
+export function useFindForMe() {
+  const [items, setItems] = useState<FindForMeRequest[]>(SEED_FIND_FOR_ME);
 
   useEffect(() => {
     setItems(read());
   }, []);
 
-  const add = useCallback((req: Omit<WantedRequest, "id" | "createdAt" | "offers">) => {
-    const entry: WantedRequest = {
+  const add = useCallback((req: Omit<FindForMeRequest, "id" | "createdAt" | "offers">) => {
+    const entry: FindForMeRequest = {
       ...req,
       id: `w-${Date.now()}`,
       createdAt: Date.now(),
@@ -111,7 +111,7 @@ export function useWanted() {
     setItems((prev) => {
       const next = [entry, ...prev];
       try {
-        const mine = next.filter((i) => !SEED_WANTED.some((s) => s.id === i.id));
+        const mine = next.filter((i) => !SEED_FIND_FOR_ME.some((s) => s.id === i.id));
         window.localStorage.setItem(KEY, JSON.stringify(mine));
       } catch {
         /* storage unavailable */
