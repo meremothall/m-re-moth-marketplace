@@ -8,7 +8,7 @@ export function Logo({ size = 40 }: { size?: number }) {
   return <span className="inline-flex items-center justify-center rounded-2xl bg-card shadow-sm" style={{ width: size, height: size }} aria-hidden><Leaf className="text-primary" style={{ width: size * 0.6, height: size * 0.6 }} /></span>;
 }
 
-export function MallHeader({ title, back }: { title?: string; back?: boolean }) {
+export function MallHeader({ title, back }: { title?: string | undefined; back?: boolean | undefined }) {
   return <header className="sticky top-0 z-30 border-b border-border bg-primary text-primary-foreground">
     <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
       {back && <Link to="/" aria-label="Back" className="rounded-full p-1 hover:bg-primary-foreground/15"><ArrowLeft className="h-5 w-5" /></Link>}
