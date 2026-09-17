@@ -5,5 +5,5 @@
 - [x] Replace About Us copy
 - [ ] Install uploaded MMM shield logo and app icons
 - [x] Simplify and personalize listing actions
-- [ ] Verify mobile and desktop
+- [x] Verify mobile and desktop
 - [ ] Publish all changes together
