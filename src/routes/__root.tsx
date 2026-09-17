@@ -78,14 +78,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { name: "theme-color", content: "#16a34a" },
+      { name: "theme-color", content: "#0A1931" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "meremoth mall" },
-      { title: "Meremoth Mall — Complete Marketplace in Douala, Cameroon" },
+      { title: "Meremoth Mall — Global Marketplace" },
       {
         name: "description",
         content:
-          "Meremoth Mall: products, services, consultants, builders, real estate, vehicles, jobs, food and education with secure in-app shopping.",
+          "Meremoth Mall is a global marketplace for secure buying, selling and hiring with private chat and escrow protection.",
       },
       { property: "og:site_name", content: "Meremoth Mall" },
       { property: "og:type", content: "website" },

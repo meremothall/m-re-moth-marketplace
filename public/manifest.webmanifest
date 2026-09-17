@@ -1,11 +1,11 @@
 {
   "name": "meremoth mall",
   "short_name": "Meremoth",
-  "description": "Complete Marketplace — Built in Douala for Cameroon, Open to the World",
+  "description": "Global Marketplace — Secured by Escrow",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0fdf4",
-  "theme_color": "#16a34a",
+  "background_color": "#F7F8FA",
+  "theme_color": "#0A1931",
   "icons": [
     {
       "src": "/favicon.ico",

@@ -1,11 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Home, Leaf, Mail, MapPin, Megaphone, MessageCircle, Plus, User } from "lucide-react";
+import { ArrowLeft, Home, Mail, MapPin, Megaphone, MessageCircle, Plus, ShieldCheck, User } from "lucide-react";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { ADMIN } from "@/lib/mall-data";
 import { NEW_FIND_FOR_ME_COUNT } from "@/lib/find-for-me";
 
 export function Logo({ size = 40 }: { size?: number }) {
-  return <span className="inline-flex items-center justify-center rounded-2xl bg-card shadow-sm" style={{ width: size, height: size }} aria-hidden><Leaf className="text-primary" style={{ width: size * 0.6, height: size * 0.6 }} /></span>;
+  return <span className="brand-shield inline-flex shrink-0 items-center justify-center bg-primary text-accent shadow-sm" style={{ width: size, height: size }} aria-hidden><span className="text-[10px] font-black">MMM</span><ShieldCheck className="absolute h-4 w-4 opacity-0" /></span>;
 }
 
 export function MallHeader({ title, back }: { title?: string | undefined; back?: boolean | undefined }) {
@@ -13,7 +13,7 @@ export function MallHeader({ title, back }: { title?: string | undefined; back?:
     <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
       {back && <Link to="/" aria-label="Back" className="rounded-full p-1 hover:bg-primary-foreground/15"><ArrowLeft className="h-5 w-5" /></Link>}
       <Logo size={38} />
-      <div className="min-w-0 flex-1"><p className="truncate text-base font-bold leading-tight">{title ?? "Meremoth Mall"}</p><p className="truncate text-[11px] opacity-90">Complete Marketplace — Built in Douala for Cameroon</p></div>
+      <div className="min-w-0 flex-1"><p className="truncate text-base font-bold leading-tight">{title ?? "Meremoth Mall"}</p><p className="truncate text-[11px] opacity-90">Global Marketplace — Secured by Escrow</p></div>
       <Link to="/dashboard" aria-label="Profile" className="rounded-full bg-primary-foreground/15 p-2 hover:bg-primary-foreground/25"><User className="h-5 w-5" /></Link>
     </div>
   </header>;
@@ -21,7 +21,7 @@ export function MallHeader({ title, back }: { title?: string | undefined; back?:
 
 export function MallFooter() {
   return <footer className="mt-10 border-t border-border bg-card px-4 py-8"><div className="mx-auto max-w-5xl space-y-3">
-    <div className="flex items-center gap-2"><Logo size={32} /><span className="font-bold">Meremoth Mall</span></div>
+    <div className="flex items-center gap-2"><Logo size={36} /><div><span className="font-bold">Meremoth Mall</span><p className="text-[10px] font-semibold text-muted-foreground">Elevating Commerce</p></div></div>
     <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground"><span className="inline-flex items-center gap-1"><Mail className="h-3 w-3" /> {ADMIN.email}</span><span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" /> {ADMIN.location}</span></div>
     <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm"><Link to="/about" className="text-primary hover:underline">About Us</Link><Link to="/contact" className="text-primary hover:underline">Contact us</Link><Link to="/become-seller" className="text-primary hover:underline">Become a Seller</Link><Link to="/pricing" className="text-primary hover:underline">Pricing &amp; Boost</Link><Link to="/terms" className="text-primary hover:underline">Terms</Link></div>
     <p className="text-xs text-muted-foreground">Meremoth Mall • Customer Support • Safe &amp; Trusted</p>
