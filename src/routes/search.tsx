@@ -12,6 +12,7 @@ import {
   DOUALA_AREAS,
   LISTINGS,
   SELLERS,
+  SCHOOLS,
   type CategoryId,
 } from "@/lib/mall-data";
 import { useFindForMe } from "@/lib/find-for-me";
@@ -58,6 +59,7 @@ function SearchPage() {
   const [internationalOnly, setInternationalOnly] = useState(false);
   const [vehicleType, setVehicleType] = useState("All");
   const [transportService, setTransportService] = useState("All");
+  const [school, setSchool] = useState("All");
 
   const results = LISTINGS.filter((l) => {
     const seller = SELLERS[l.sellerId]!;
@@ -68,6 +70,7 @@ function SearchPage() {
       if (vehicleType !== "All" && l.vehicleType !== vehicleType) return false;
       if (transportService !== "All" && l.transportService !== transportService) return false;
     }
+    if (category === "school-corner" && school !== "All" && l.school !== school) return false;
     if (city !== "All" && !l.location.includes(city)) return false;
     if (condition !== "All" && l.condition !== condition) return false;
     if (min && l.price < Number(min)) return false;
@@ -123,6 +126,15 @@ function SearchPage() {
               ))}
             </div>
           </>
+        )}
+        {category === "school-corner" && (
+          <div className="space-y-1.5">
+            <Label htmlFor="school-filter">By School</Label>
+            <select id="school-filter" value={school} onChange={(event) => setSchool(event.target.value)} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm text-foreground">
+              <option value="All">All schools</option>
+              {SCHOOLS.map((name) => <option key={name} value={name}>{name}</option>)}
+            </select>
+          </div>
         )}
         <div className="flex flex-wrap gap-2">
           {["All", ...DOUALA_AREAS, ...CITIES].map((c) => (
