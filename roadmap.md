@@ -4,6 +4,6 @@
 - [x] Apply global navy and gold branding and new marketplace tagline
 - [x] Replace About Us copy
 - [ ] Install uploaded MMM shield logo and app icons
-- [ ] Simplify and personalize listing actions
+- [x] Simplify and personalize listing actions
 - [ ] Verify mobile and desktop
 - [ ] Publish all changes together

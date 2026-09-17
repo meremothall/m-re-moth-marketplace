@@ -2,9 +2,11 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
 import {
   CalendarDays,
+  Flag,
+  Heart,
   MapPin,
   MessageSquare,
-  Send,
+  Share2,
   ShieldCheck,
   Star,
 } from "lucide-react";
@@ -57,12 +59,21 @@ function ListingPage() {
   const { listing } = Route.useLoaderData();
   const seller = SELLERS[listing.sellerId]!;
   const [active, setActive] = useState(0);
-  const [quoteOpen, setQuoteOpen] = useState(false);
-  const [messageOpen, setMessageOpen] = useState(false);
-  const [bookOpen, setBookOpen] = useState(false);
+  const [actionOpen, setActionOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  const isPro = listing.category === "consultants" || listing.category === "builders";
   const priceText = `${fcfa(listing.price)}${listing.priceUnit ?? ""}`;
+  const isProduct = ["products", "school-corner", "vehicles", "food", "education", "hotels", "transport", "jobs"].includes(listing.category);
+  const actionLabel = listing.category === "services"
+    ? "Book Service"
+    : listing.category === "builders"
+      ? "Get Quote"
+      : listing.category === "consultants"
+        ? "Book Consultation"
+        : listing.category === "real-estate"
+          ? listing.sub.toLowerCase().includes("sale") ? "Contact Agent" : "Contact Landlord"
+          : "Help Me Find";
   const related = LISTINGS.filter(
     (l) => l.category === listing.category && l.id !== listing.id,
   ).slice(0, 4);
@@ -181,28 +192,17 @@ function ListingPage() {
       </Card>
 
       <section className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
-        <h2 className="text-lg font-bold">Get in Touch — Contact Seller</h2>
-        <div className="mt-3 grid gap-2">
+        <h2 className="text-lg font-bold">Choose your next step</h2>
+        <div className="mt-3 grid gap-3">
           <div className="grid grid-cols-2 gap-2">
             <Button asChild variant="outline"><Link to="/chat/$sellerId" params={{ sellerId: seller.id }}><MessageSquare className="mr-2 h-4 w-4" />Chat Seller</Link></Button>
-            <CheckoutDrawer listing={listing} />
+            {isProduct ? <CheckoutDrawer listing={listing} /> : <Button onClick={() => setActionOpen(true)}><CalendarDays className="mr-2 h-4 w-4" />{actionLabel}</Button>}
           </div>
-          <Button variant="outline" className="rounded-2xl" onClick={() => setQuoteOpen(true)}>
-            Request Quote / Request Service
-          </Button>
-          <Button variant="outline" className="rounded-2xl" onClick={() => setMessageOpen(true)}>
-            <Send className="mr-2 h-4 w-4" /> Send Message
-          </Button>
-          {isPro && (
-            <div className="grid gap-2 sm:grid-cols-2">
-              <Button className="rounded-2xl" onClick={() => setQuoteOpen(true)}>
-                Hire {seller.name.split(" ")[0]}
-              </Button>
-              <Button variant="outline" className="rounded-2xl" onClick={() => setBookOpen(true)}>
-                <CalendarDays className="mr-2 h-4 w-4" /> Book Consultation
-              </Button>
-            </div>
-          )}
+          <div className="grid grid-cols-3 gap-1 border-t border-border pt-2">
+            <Button variant="ghost" size="sm" className="px-1 text-xs" onClick={() => { setSaved((value) => !value); toast.success(saved ? "Removed from saved listings." : "Listing saved."); }}><Heart className={`mr-1 h-4 w-4 ${saved ? "fill-current" : ""}`} />{saved ? "Saved" : "Save"}</Button>
+            <Button variant="ghost" size="sm" className="px-1 text-xs" onClick={async () => { if (navigator.share) await navigator.share({ title: listing.title, url: window.location.href }); else { await navigator.clipboard.writeText(window.location.href); toast.success("Listing link copied."); } }}><Share2 className="mr-1 h-4 w-4" />Share</Button>
+            <Button variant="ghost" size="sm" className="px-1 text-xs text-destructive" onClick={() => setReportOpen(true)}><Flag className="mr-1 h-4 w-4" />Report</Button>
+          </div>
         </div>
       </section>
 
@@ -226,10 +226,10 @@ function ListingPage() {
         </section>
       )}
 
-      <Dialog open={quoteOpen} onOpenChange={setQuoteOpen}>
+      <Dialog open={actionOpen} onOpenChange={setActionOpen}>
         <DialogContent className="max-h-[85vh] overflow-y-auto rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Request Quote / Request Service</DialogTitle>
+            <DialogTitle>{actionLabel}</DialogTitle>
             <DialogDescription>
               Sent privately to the seller inbox.
             </DialogDescription>
@@ -238,8 +238,8 @@ function ListingPage() {
             className="space-y-3"
             onSubmit={(e) => {
               e.preventDefault();
-              setQuoteOpen(false);
-              toast.success("Request sent to the seller. They usually reply within a few hours.");
+              setActionOpen(false);
+              toast.success(`${actionLabel} request sent.`);
             }}
           >
             <Field label="Your Name" required />
@@ -258,55 +258,26 @@ function ListingPage() {
         </DialogContent>
       </Dialog>
 
-      <Dialog open={messageOpen} onOpenChange={setMessageOpen}>
+      <Dialog open={reportOpen} onOpenChange={setReportOpen}>
         <DialogContent className="rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Send Message</DialogTitle>
-            <DialogDescription>Your message goes straight to {seller.name}.</DialogDescription>
+            <DialogTitle>Report listing</DialogTitle>
+            <DialogDescription>Tell us what is wrong. Your report stays private.</DialogDescription>
           </DialogHeader>
           <form
             className="space-y-3"
             onSubmit={(e) => {
               e.preventDefault();
-              setMessageOpen(false);
-              toast.success("Message sent.");
+              setReportOpen(false);
+              toast.success("Report submitted for review.");
             }}
           >
-            <Field label="Your Name" required />
-            <Field label="Phone or Email" required />
-            <div className="space-y-1.5">
-              <Label htmlFor="msg">Message</Label>
-              <Textarea id="msg" required maxLength={1000} />
-            </div>
+            <fieldset className="space-y-2">
+              <legend className="text-sm font-semibold">Reason</legend>
+              {["Fake product", "Wrong price", "Scammer", "Other"].map((reason) => <label key={reason} className="flex items-center gap-2 rounded-md border border-border p-3 text-sm"><input type="radio" name="reason" value={reason} required />{reason}</label>)}
+            </fieldset>
             <Button type="submit" className="w-full rounded-2xl">
-              Send
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={bookOpen} onOpenChange={setBookOpen}>
-        <DialogContent className="rounded-2xl">
-          <DialogHeader>
-            <DialogTitle>Book Consultation</DialogTitle>
-            <DialogDescription>
-              Pick a date and time. {priceText} per session.
-            </DialogDescription>
-          </DialogHeader>
-          <form
-            className="space-y-3"
-            onSubmit={(e) => {
-              e.preventDefault();
-              setBookOpen(false);
-              toast.success("Booking request sent. The consultant will confirm your slot.");
-            }}
-          >
-            <Field label="Your Name" required />
-            <Field label="Phone" type="tel" required />
-            <Field label="Date" type="date" required />
-            <Field label="Time" type="time" required />
-            <Button type="submit" className="w-full rounded-2xl">
-              Request booking
+              Submit report
             </Button>
           </form>
         </DialogContent>

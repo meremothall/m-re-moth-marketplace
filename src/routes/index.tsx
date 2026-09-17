@@ -224,7 +224,7 @@ function Home() {
               return (
                 <Link key={c.id} to="/jobs" className="relative flex flex-col items-center gap-1 rounded-2xl bg-card p-3 text-center shadow-sm transition hover:shadow-md">
                   <Badge className="absolute -right-1 -top-2 bg-primary text-primary-foreground">NEW</Badge>
-                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary">{c.id === "school-corner" ? <span className="text-xl" aria-hidden>🎒</span> : <Icon className="h-5 w-5 text-primary" />}</span>
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary"><Icon className="h-5 w-5 text-primary" /></span>
                   <span className="text-xs font-semibold leading-tight">{c.name}</span><span className="text-[10px] text-muted-foreground">Offers &amp; talent</span>
                 </Link>
               );
