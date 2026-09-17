@@ -32,13 +32,13 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Meremoth Mall — Complete Marketplace in Douala, Cameroon" },
+      { title: "Meremoth Mall — Global Marketplace" },
       {
         name: "description",
         content:
-          "Buy and sell products, services, consultants, house plans, real estate, vehicles, jobs, food and courses on Meremoth Mall. Built in Douala for Cameroon, open to the world.",
+          "Buy, sell and hire worldwide with private chat and secure escrow protection on Meremoth Mall.",
       },
-      { property: "og:title", content: "Meremoth Mall — Complete Marketplace" },
+      { property: "og:title", content: "Meremoth Mall — Global Marketplace" },
       {
         property: "og:description",
         content:
@@ -242,7 +242,7 @@ function Home() {
                   </Badge>
                 )}
                 <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary">
-                  <Icon className="h-5 w-5 text-primary" />
+                    {c.id === "school-corner" ? <span className="text-xl" aria-hidden>🎒</span> : <Icon className="h-5 w-5 text-primary" />}
                 </span>
                 <span className="text-xs font-semibold leading-tight">{c.name}</span>
                 <span className="text-[10px] text-muted-foreground">{c.count}</span>
@@ -312,6 +312,7 @@ function Home() {
       <section className="mt-7"><div className="mb-2 flex items-end justify-between"><h2 className="text-lg font-bold">Jobs</h2><Link to="/jobs" className="text-sm text-primary hover:underline">Job Offers · Find Talent</Link></div><Row title="Latest Job Offers" items={filter(listingsByCategory("jobs"))} /></section>
       <Row title="Food & Restaurants" items={filter(listingsByCategory("food"))} />
       <Row title="Education & Training" items={filter(listingsByCategory("education"))} />
+      <Row title="School Corner" subtitle="Uniforms, books, bags, shoes and lab equipment by school" items={filter(listingsByCategory("school-corner"))} />
       <Row title="Services near you" items={filter(listingsByCategory("services"))} />
       <Row title="Consultants" items={filter(listingsByCategory("consultants"))} />
 

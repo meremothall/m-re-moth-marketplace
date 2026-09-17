@@ -27,6 +27,7 @@ export type CategoryId =
   | "jobs"
   | "food"
   | "education"
+  | "school-corner"
   | "hotels"
   | "transport";
 
@@ -42,6 +43,14 @@ export const DOUALA_AREAS = [
   "Logbessou",
   "Ndokoti",
 ];
+
+export const SCHOOLS = [
+  "Collège Libermann",
+  "Collège Alfred Saker",
+  "Institut Polyvalent Bonabéri",
+  "Lycée Joss Douala",
+  "Collège Bilingue Deido",
+] as const;
 
 export type Category = {
   id: CategoryId;
@@ -164,6 +173,14 @@ export const CATEGORIES: Category[] = [
       "Driving School",
       "Professional Training",
     ],
+  },
+  {
+    id: "school-corner",
+    name: "School Corner",
+    icon: "🎒",
+    count: "84 essentials",
+    isNew: true,
+    subs: ["Uniforms", "Books New & Second Hand", "Backpacks & Shoes", "Lab Equipment"],
   },
   {
     id: "hotels",
@@ -320,11 +337,63 @@ export type Listing = {
   stars?: number;
   vehicleType?: "Car" | "Moto" | "Truck" | "Bus";
   transportService?: "For Sale" | "For Rent With Driver" | "For Goods" | "Ticket";
+  school?: (typeof SCHOOLS)[number];
   sponsored?: boolean;
   featured?: boolean;
 };
 
 export const LISTINGS: Listing[] = [
+  {
+    id: "libermann-uniform-set",
+    title: "Collège Libermann Complete Uniform Set",
+    category: "school-corner",
+    sub: "Uniforms",
+    price: 18500,
+    condition: "Brand New",
+    location: "Douala, Akwa",
+    rating: 4.8,
+    reviews: 26,
+    sellerId: "s4",
+    description: "Complete approved school uniform set with shirt, trousers and badge.",
+    specs: { School: "Collège Libermann", Sizes: "8–18 years", Includes: "Shirt, trousers, badge" },
+    emoji: "👔",
+    stock: 32,
+    school: "Collège Libermann",
+  },
+  {
+    id: "saker-science-books",
+    title: "Collège Alfred Saker Science Book Bundle",
+    category: "school-corner",
+    sub: "Books New & Second Hand",
+    price: 12000,
+    condition: "Okaza / Second Hand",
+    location: "Douala, Deido",
+    rating: 4.7,
+    reviews: 18,
+    sellerId: "s2",
+    description: "Clean second-hand science textbook bundle for the new school year.",
+    specs: { School: "Collège Alfred Saker", Level: "Form 3", Condition: "Good" },
+    emoji: "📚",
+    stock: 8,
+    school: "Collège Alfred Saker",
+  },
+  {
+    id: "joss-lab-kit",
+    title: "Lycée Joss Student Laboratory Kit",
+    category: "school-corner",
+    sub: "Lab Equipment",
+    price: 22500,
+    condition: "Brand New",
+    location: "Douala, Bonanjo",
+    rating: 4.9,
+    reviews: 14,
+    sellerId: "s4",
+    description: "Student laboratory essentials packed for safe transport and classroom use.",
+    specs: { School: "Lycée Joss Douala", Includes: "Coat, goggles, basic glassware", Level: "Secondary" },
+    emoji: "🧪",
+    stock: 20,
+    school: "Lycée Joss Douala",
+  },
   {
     id: "wireless-headphones",
     title: "Wireless Headphones",
