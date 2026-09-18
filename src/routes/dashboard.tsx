@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { MallShell } from "@/components/mall/Chrome";
+import { Deliveries } from "@/components/mall/Deliveries";
 import { LISTINGS, fcfa } from "@/lib/mall-data";
 
 export const Route = createFileRoute("/dashboard")({
@@ -52,8 +53,13 @@ function Dashboard() {
         <TabsList className="flex w-full flex-wrap">
           <TabsTrigger value="listings">My Listings</TabsTrigger>
           <TabsTrigger value="orders">My Orders</TabsTrigger>
+          <TabsTrigger value="deliveries">Deliveries</TabsTrigger>
           <TabsTrigger value="earnings">Earnings</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="deliveries" className="mt-3">
+          <Deliveries />
+        </TabsContent>
 
         <TabsContent value="listings" className="mt-3 space-y-3">
           <Button asChild className="w-full rounded-2xl">

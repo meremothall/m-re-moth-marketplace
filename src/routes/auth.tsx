@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { MallShell } from "@/components/mall/Chrome";
-import { COUNTRIES } from "@/lib/mall-data";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -15,10 +15,10 @@ export const Route = createFileRoute("/auth")({
       {
         name: "description",
         content:
-          "Sign in to Meremoth Mall with your phone number to chat with sellers, save favourites and manage your listings.",
+          "Create your Meremoth Mall account to use your wallet, pay with escrow protection and track bus agency deliveries.",
       },
       { property: "og:title", content: "Login or Sign up — Meremoth Mall" },
-      { property: "og:description", content: "Phone number login for buyers and sellers." },
+      { property: "og:description", content: "Secure account for buyers and sellers." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -27,58 +27,88 @@ export const Route = createFileRoute("/auth")({
 });
 
 function AuthPage() {
-  const [sent, setSent] = useState(false);
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (mode: "login" | "signup") => {
+    setBusy(true);
+    try {
+      if (mode === "login") {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        toast.success("Welcome back.");
+        navigate({ to: "/dashboard" });
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/dashboard`,
+            data: { full_name: name },
+          },
+        });
+        if (error) throw error;
+        toast.success("Account created. Check your email to confirm.");
+      }
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Something went wrong.");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <MallShell title="Login / Sign up" back>
       <div className="mx-auto max-w-sm rounded-2xl bg-card p-5 shadow-sm">
         <Tabs defaultValue="login">
           <TabsList className="w-full">
-            <TabsTrigger value="login" className="flex-1">
-              Login
-            </TabsTrigger>
-            <TabsTrigger value="signup" className="flex-1">
-              Sign up
-            </TabsTrigger>
+            <TabsTrigger value="login" className="flex-1">Login</TabsTrigger>
+            <TabsTrigger value="signup" className="flex-1">Sign up</TabsTrigger>
           </TabsList>
 
-          {["login", "signup"].map((tab) => (
+          {(["login", "signup"] as const).map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-4">
               <form
                 className="space-y-3"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (!sent) {
-                    setSent(true);
-                    toast.success("Code sent by SMS.");
-                  } else {
-                    toast.info("Phone login goes live once the cloud backend is switched on.");
-                  }
+                  void submit(tab);
                 }}
               >
                 {tab === "signup" && (
                   <div className="space-y-1.5">
                     <Label htmlFor="name">Full name</Label>
-                    <Input id="name" required maxLength={100} />
+                    <Input id="name" value={name} onChange={(e) => setName(e.target.value)} required maxLength={100} />
                   </div>
                 )}
                 <div className="space-y-1.5">
-                  <Label htmlFor="phone">Phone number</Label>
-                  <div className="flex gap-2">
-                    <span className="flex items-center rounded-xl border border-input px-3 text-sm">
-                      {COUNTRIES[0]!.flag} +237
-                    </span>
-                    <Input id="phone" type="tel" required placeholder="653779134" maxLength={20} />
-                  </div>
+                  <Label htmlFor={`email-${tab}`}>Email</Label>
+                  <Input
+                    id={`email-${tab}`}
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    maxLength={255}
+                  />
                 </div>
-                {sent && (
-                  <div className="space-y-1.5">
-                    <Label htmlFor="otp">SMS code</Label>
-                    <Input id="otp" inputMode="numeric" maxLength={6} placeholder="6 digits" />
-                  </div>
-                )}
-                <Button type="submit" className="w-full rounded-2xl">
-                  {sent ? "Verify code" : "Send code"}
+                <div className="space-y-1.5">
+                  <Label htmlFor={`password-${tab}`}>Password</Label>
+                  <Input
+                    id={`password-${tab}`}
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={8}
+                    maxLength={72}
+                  />
+                </div>
+                <Button type="submit" className="w-full rounded-2xl" disabled={busy}>
+                  {tab === "login" ? "Login" : "Create account"}
                 </Button>
               </form>
             </TabsContent>

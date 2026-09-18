@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as AddListingRouteImport } from './routes/add-listing'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AgencyLoginRouteImport } from './routes/agency-login'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BecomeSellerRouteImport } from './routes/become-seller'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -24,9 +25,12 @@ import { Route as MeremothMallHomepageUiRouteImport } from './routes/meremoth-ma
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as WalletRouteImport } from './routes/wallet'
 import { Route as WantedRouteImport } from './routes/wanted'
 import { Route as ChatSellerIdRouteImport } from './routes/chat.$sellerId'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
+import { Route as ApiPublicLogisticsAutoReleaseRouteImport } from './routes/api/public/logistics/auto-release'
+import { Route as ApiPublicWalletCinetpayNotifyRouteImport } from './routes/api/public/wallet/cinetpay-notify'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +50,11 @@ const AddListingRoute = AddListingRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AgencyLoginRoute = AgencyLoginRouteImport.update({
+  id: '/agency-login',
+  path: '/agency-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -103,6 +112,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WalletRoute = WalletRouteImport.update({
+  id: '/wallet',
+  path: '/wallet',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WantedRoute = WantedRouteImport.update({
   id: '/wanted',
   path: '/wanted',
@@ -118,12 +132,25 @@ const ListingIdRoute = ListingIdRouteImport.update({
   path: '/listing/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLogisticsAutoReleaseRoute =
+  ApiPublicLogisticsAutoReleaseRouteImport.update({
+    id: '/api/public/logistics/auto-release',
+    path: '/api/public/logistics/auto-release',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicWalletCinetpayNotifyRoute =
+  ApiPublicWalletCinetpayNotifyRouteImport.update({
+    id: '/api/public/wallet/cinetpay-notify',
+    path: '/api/public/wallet/cinetpay-notify',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/add-listing': typeof AddListingRoute
   '/admin': typeof AdminRoute
+  '/agency-login': typeof AgencyLoginRoute
   '/auth': typeof AuthRoute
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
@@ -135,15 +162,19 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
+  '/wallet': typeof WalletRoute
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/logistics/auto-release': typeof ApiPublicLogisticsAutoReleaseRoute
+  '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/add-listing': typeof AddListingRoute
   '/admin': typeof AdminRoute
+  '/agency-login': typeof AgencyLoginRoute
   '/auth': typeof AuthRoute
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
@@ -155,9 +186,12 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
+  '/wallet': typeof WalletRoute
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/logistics/auto-release': typeof ApiPublicLogisticsAutoReleaseRoute
+  '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -165,6 +199,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/add-listing': typeof AddListingRoute
   '/admin': typeof AdminRoute
+  '/agency-login': typeof AgencyLoginRoute
   '/auth': typeof AuthRoute
   '/become-seller': typeof BecomeSellerRoute
   '/contact': typeof ContactRoute
@@ -176,9 +211,12 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
   '/terms': typeof TermsRoute
+  '/wallet': typeof WalletRoute
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/logistics/auto-release': typeof ApiPublicLogisticsAutoReleaseRoute
+  '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -187,6 +225,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/add-listing'
     | '/admin'
+    | '/agency-login'
     | '/auth'
     | '/become-seller'
     | '/contact'
@@ -198,15 +237,19 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/search'
     | '/terms'
+    | '/wallet'
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/logistics/auto-release'
+    | '/api/public/wallet/cinetpay-notify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/add-listing'
     | '/admin'
+    | '/agency-login'
     | '/auth'
     | '/become-seller'
     | '/contact'
@@ -218,15 +261,19 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/search'
     | '/terms'
+    | '/wallet'
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/logistics/auto-release'
+    | '/api/public/wallet/cinetpay-notify'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/add-listing'
     | '/admin'
+    | '/agency-login'
     | '/auth'
     | '/become-seller'
     | '/contact'
@@ -238,9 +285,12 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/search'
     | '/terms'
+    | '/wallet'
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/logistics/auto-release'
+    | '/api/public/wallet/cinetpay-notify'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -248,6 +298,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AddListingRoute: typeof AddListingRoute
   AdminRoute: typeof AdminRoute
+  AgencyLoginRoute: typeof AgencyLoginRoute
   AuthRoute: typeof AuthRoute
   BecomeSellerRoute: typeof BecomeSellerRoute
   ContactRoute: typeof ContactRoute
@@ -259,9 +310,12 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   SearchRoute: typeof SearchRoute
   TermsRoute: typeof TermsRoute
+  WalletRoute: typeof WalletRoute
   WantedRoute: typeof WantedRoute
   ChatSellerIdRoute: typeof ChatSellerIdRoute
   ListingIdRoute: typeof ListingIdRoute
+  ApiPublicLogisticsAutoReleaseRoute: typeof ApiPublicLogisticsAutoReleaseRoute
+  ApiPublicWalletCinetpayNotifyRoute: typeof ApiPublicWalletCinetpayNotifyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -292,6 +346,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/agency-login': {
+      id: '/agency-login'
+      path: '/agency-login'
+      fullPath: '/agency-login'
+      preLoaderRoute: typeof AgencyLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -371,6 +432,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wallet': {
+      id: '/wallet'
+      path: '/wallet'
+      fullPath: '/wallet'
+      preLoaderRoute: typeof WalletRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wanted': {
       id: '/wanted'
       path: '/wanted'
@@ -392,6 +460,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/logistics/auto-release': {
+      id: '/api/public/logistics/auto-release'
+      path: '/api/public/logistics/auto-release'
+      fullPath: '/api/public/logistics/auto-release'
+      preLoaderRoute: typeof ApiPublicLogisticsAutoReleaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/wallet/cinetpay-notify': {
+      id: '/api/public/wallet/cinetpay-notify'
+      path: '/api/public/wallet/cinetpay-notify'
+      fullPath: '/api/public/wallet/cinetpay-notify'
+      preLoaderRoute: typeof ApiPublicWalletCinetpayNotifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -400,6 +482,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AddListingRoute: AddListingRoute,
   AdminRoute: AdminRoute,
+  AgencyLoginRoute: AgencyLoginRoute,
   AuthRoute: AuthRoute,
   BecomeSellerRoute: BecomeSellerRoute,
   ContactRoute: ContactRoute,
@@ -411,9 +494,12 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   SearchRoute: SearchRoute,
   TermsRoute: TermsRoute,
+  WalletRoute: WalletRoute,
   WantedRoute: WantedRoute,
   ChatSellerIdRoute: ChatSellerIdRoute,
   ListingIdRoute: ListingIdRoute,
+  ApiPublicLogisticsAutoReleaseRoute: ApiPublicLogisticsAutoReleaseRoute,
+  ApiPublicWalletCinetpayNotifyRoute: ApiPublicWalletCinetpayNotifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
