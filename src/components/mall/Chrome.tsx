@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Home, Mail, MapPin, Megaphone, MessageCircle, Plus, ShieldCheck, User } from "lucide-react";
+import { ArrowLeft, Home, Mail, MapPin, Megaphone, MessageCircle, Plus, ShieldCheck, User, Wallet } from "lucide-react";
 import { useEffect, useRef, useState, type PointerEvent, type ReactNode } from "react";
 import { ADMIN } from "@/lib/mall-data";
 import { NEW_FIND_FOR_ME_COUNT } from "@/lib/find-for-me";
@@ -14,6 +14,7 @@ export function MallHeader({ title, back }: { title?: string | undefined; back?:
       {back && <Link to="/" aria-label="Back" className="rounded-full p-1 hover:bg-primary-foreground/15"><ArrowLeft className="h-5 w-5" /></Link>}
       <Logo size={38} />
       <div className="min-w-0 flex-1"><p className="truncate text-base font-bold leading-tight">{title ?? "Meremoth Mall"}</p><p className="truncate text-[11px] opacity-90">Global Marketplace — Secured by Escrow</p></div>
+      <Link to="/wallet" aria-label="Wallet" className="rounded-full bg-primary-foreground/15 p-2 hover:bg-primary-foreground/25"><Wallet className="h-5 w-5" /></Link>
       <Link to="/dashboard" aria-label="Profile" className="rounded-full bg-primary-foreground/15 p-2 hover:bg-primary-foreground/25"><User className="h-5 w-5" /></Link>
     </div>
   </header>;
