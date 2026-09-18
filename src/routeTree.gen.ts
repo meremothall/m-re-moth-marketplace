@@ -27,6 +27,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WantedRouteImport } from './routes/wanted'
 import { Route as ChatSellerIdRouteImport } from './routes/chat.$sellerId'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
+import { Route as ApiPublicLogisticsAutoReleaseRouteImport } from './routes/api/public/logistics/auto-release'
 import { Route as ApiPublicWalletCinetpayNotifyRouteImport } from './routes/api/public/wallet/cinetpay-notify'
 
 const IndexRoute = IndexRouteImport.update({
@@ -119,6 +120,12 @@ const ListingIdRoute = ListingIdRouteImport.update({
   path: '/listing/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicLogisticsAutoReleaseRoute =
+  ApiPublicLogisticsAutoReleaseRouteImport.update({
+    id: '/api/public/logistics/auto-release',
+    path: '/api/public/logistics/auto-release',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicWalletCinetpayNotifyRoute =
   ApiPublicWalletCinetpayNotifyRouteImport.update({
     id: '/api/public/wallet/cinetpay-notify',
@@ -145,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/logistics/auto-release': typeof ApiPublicLogisticsAutoReleaseRoute
   '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRoutesByTo {
@@ -166,6 +174,7 @@ export interface FileRoutesByTo {
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/logistics/auto-release': typeof ApiPublicLogisticsAutoReleaseRoute
   '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRoutesById {
@@ -188,6 +197,7 @@ export interface FileRoutesById {
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/logistics/auto-release': typeof ApiPublicLogisticsAutoReleaseRoute
   '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRouteTypes {
@@ -211,6 +221,7 @@ export interface FileRouteTypes {
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/logistics/auto-release'
     | '/api/public/wallet/cinetpay-notify'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/logistics/auto-release'
     | '/api/public/wallet/cinetpay-notify'
   id:
     | '__root__'
@@ -253,6 +265,7 @@ export interface FileRouteTypes {
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/logistics/auto-release'
     | '/api/public/wallet/cinetpay-notify'
   fileRoutesById: FileRoutesById
 }
@@ -275,6 +288,7 @@ export interface RootRouteChildren {
   WantedRoute: typeof WantedRoute
   ChatSellerIdRoute: typeof ChatSellerIdRoute
   ListingIdRoute: typeof ListingIdRoute
+  ApiPublicLogisticsAutoReleaseRoute: typeof ApiPublicLogisticsAutoReleaseRoute
   ApiPublicWalletCinetpayNotifyRoute: typeof ApiPublicWalletCinetpayNotifyRoute
 }
 
@@ -406,6 +420,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/logistics/auto-release': {
+      id: '/api/public/logistics/auto-release'
+      path: '/api/public/logistics/auto-release'
+      fullPath: '/api/public/logistics/auto-release'
+      preLoaderRoute: typeof ApiPublicLogisticsAutoReleaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/wallet/cinetpay-notify': {
       id: '/api/public/wallet/cinetpay-notify'
       path: '/api/public/wallet/cinetpay-notify'
@@ -435,6 +456,7 @@ const rootRouteChildren: RootRouteChildren = {
   WantedRoute: WantedRoute,
   ChatSellerIdRoute: ChatSellerIdRoute,
   ListingIdRoute: ListingIdRoute,
+  ApiPublicLogisticsAutoReleaseRoute: ApiPublicLogisticsAutoReleaseRoute,
   ApiPublicWalletCinetpayNotifyRoute: ApiPublicWalletCinetpayNotifyRoute,
 }
 export const routeTree = rootRouteImport
