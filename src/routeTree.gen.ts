@@ -27,6 +27,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as WantedRouteImport } from './routes/wanted'
 import { Route as ChatSellerIdRouteImport } from './routes/chat.$sellerId'
 import { Route as ListingIdRouteImport } from './routes/listing.$id'
+import { Route as ApiPublicWalletCinetpayNotifyRouteImport } from './routes/api/public/wallet/cinetpay-notify'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -118,6 +119,12 @@ const ListingIdRoute = ListingIdRouteImport.update({
   path: '/listing/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicWalletCinetpayNotifyRoute =
+  ApiPublicWalletCinetpayNotifyRouteImport.update({
+    id: '/api/public/wallet/cinetpay-notify',
+    path: '/api/public/wallet/cinetpay-notify',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,6 +166,7 @@ export interface FileRoutesByTo {
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -179,6 +188,7 @@ export interface FileRoutesById {
   '/wanted': typeof WantedRoute
   '/chat/$sellerId': typeof ChatSellerIdRoute
   '/listing/$id': typeof ListingIdRoute
+  '/api/public/wallet/cinetpay-notify': typeof ApiPublicWalletCinetpayNotifyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/wallet/cinetpay-notify'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,6 +232,7 @@ export interface FileRouteTypes {
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/wallet/cinetpay-notify'
   id:
     | '__root__'
     | '/'
@@ -241,6 +253,7 @@ export interface FileRouteTypes {
     | '/wanted'
     | '/chat/$sellerId'
     | '/listing/$id'
+    | '/api/public/wallet/cinetpay-notify'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -262,6 +275,7 @@ export interface RootRouteChildren {
   WantedRoute: typeof WantedRoute
   ChatSellerIdRoute: typeof ChatSellerIdRoute
   ListingIdRoute: typeof ListingIdRoute
+  ApiPublicWalletCinetpayNotifyRoute: typeof ApiPublicWalletCinetpayNotifyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -392,6 +406,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/wallet/cinetpay-notify': {
+      id: '/api/public/wallet/cinetpay-notify'
+      path: '/api/public/wallet/cinetpay-notify'
+      fullPath: '/api/public/wallet/cinetpay-notify'
+      preLoaderRoute: typeof ApiPublicWalletCinetpayNotifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -414,6 +435,7 @@ const rootRouteChildren: RootRouteChildren = {
   WantedRoute: WantedRoute,
   ChatSellerIdRoute: ChatSellerIdRoute,
   ListingIdRoute: ListingIdRoute,
+  ApiPublicWalletCinetpayNotifyRoute: ApiPublicWalletCinetpayNotifyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
