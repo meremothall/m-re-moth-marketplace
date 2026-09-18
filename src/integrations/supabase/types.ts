@@ -14,7 +14,204 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agency_branches: {
+        Row: {
+          agency_id: string
+          city: string
+          created_at: string
+          id: string
+          phone: string | null
+          quarter: string | null
+        }
+        Insert: {
+          agency_id: string
+          city: string
+          created_at?: string
+          id?: string
+          phone?: string | null
+          quarter?: string | null
+        }
+        Update: {
+          agency_id?: string
+          city?: string
+          created_at?: string
+          id?: string
+          phone?: string | null
+          quarter?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_branches_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "bus_agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bus_agencies: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          logo_url: string | null
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
+      shipments: {
+        Row: {
+          agency_id: string | null
+          amount: number
+          branch_from: string | null
+          branch_to: string | null
+          buyer_id: string
+          claimed_at: string | null
+          created_at: string
+          driver_phone: string | null
+          escrow_held: boolean
+          id: string
+          item_title: string | null
+          order_id: string | null
+          receipt_code: string
+          seller_id: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          updated_at: string
+          vehicle_plate: string | null
+        }
+        Insert: {
+          agency_id?: string | null
+          amount?: number
+          branch_from?: string | null
+          branch_to?: string | null
+          buyer_id: string
+          claimed_at?: string | null
+          created_at?: string
+          driver_phone?: string | null
+          escrow_held?: boolean
+          id?: string
+          item_title?: string | null
+          order_id?: string | null
+          receipt_code: string
+          seller_id?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          updated_at?: string
+          vehicle_plate?: string | null
+        }
+        Update: {
+          agency_id?: string | null
+          amount?: number
+          branch_from?: string | null
+          branch_to?: string | null
+          buyer_id?: string
+          claimed_at?: string | null
+          created_at?: string
+          driver_phone?: string | null
+          escrow_held?: boolean
+          id?: string
+          item_title?: string | null
+          order_id?: string | null
+          receipt_code?: string
+          seller_id?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          updated_at?: string
+          vehicle_plate?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "bus_agencies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_branch_from_fkey"
+            columns: ["branch_from"]
+            isOneToOne: false
+            referencedRelation: "agency_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_branch_to_fkey"
+            columns: ["branch_to"]
+            isOneToOne: false
+            referencedRelation: "agency_branches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          cinetpay_transaction_id: string | null
+          created_at: string
+          description: string | null
+          id: string
+          status: Database["public"]["Enums"]["wallet_tx_status"]
+          type: Database["public"]["Enums"]["wallet_tx_type"]
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          cinetpay_transaction_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["wallet_tx_status"]
+          type: Database["public"]["Enums"]["wallet_tx_type"]
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          cinetpay_transaction_id?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["wallet_tx_status"]
+          type?: Database["public"]["Enums"]["wallet_tx_type"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallets: {
+        Row: {
+          balance: number
+          currency: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          balance?: number
+          currency?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          balance?: number
+          currency?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +220,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      shipment_status:
+        | "pending_at_seller"
+        | "received_by_agency"
+        | "in_transit"
+        | "arrived_at_destination"
+        | "claimed_by_buyer"
+        | "confirmed_by_buyer"
+      wallet_tx_status: "success" | "pending" | "failed"
+      wallet_tx_type: "topup" | "payment" | "refund" | "commission" | "payout"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +355,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      shipment_status: [
+        "pending_at_seller",
+        "received_by_agency",
+        "in_transit",
+        "arrived_at_destination",
+        "claimed_by_buyer",
+        "confirmed_by_buyer",
+      ],
+      wallet_tx_status: ["success", "pending", "failed"],
+      wallet_tx_type: ["topup", "payment", "refund", "commission", "payout"],
+    },
   },
 } as const
