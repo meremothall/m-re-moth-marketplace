@@ -167,15 +167,18 @@ export const agencyUpdateShipment = createServerFn({ method: "POST" })
     if (data.code !== agencyCode()) throw new Error("Invalid agency access code");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const patch: Record<string, unknown> = {
-      status: data.status,
-      updated_at: new Date().toISOString(),
-    };
-    if (data.vehiclePlate) patch["vehicle_plate"] = data.vehiclePlate;
-    if (data.driverPhone) patch["driver_phone"] = data.driverPhone;
-    if (data.status === "claimed_by_buyer") patch["claimed_at"] = new Date().toISOString();
-
-    const { error } = await supabaseAdmin.from("shipments").update(patch).eq("id", data.shipmentId);
+    const { error } = await supabaseAdmin
+      .from("shipments")
+      .update({
+        status: data.status,
+        updated_at: new Date().toISOString(),
+        ...(data.vehiclePlate ? { vehicle_plate: data.vehiclePlate } : {}),
+        ...(data.driverPhone ? { driver_phone: data.driverPhone } : {}),
+        ...(data.status === "claimed_by_buyer"
+          ? { claimed_at: new Date().toISOString() }
+          : {}),
+      })
+      .eq("id", data.shipmentId);
     if (error) throw new Error(error.message);
     return { ok: true as const };
   });
