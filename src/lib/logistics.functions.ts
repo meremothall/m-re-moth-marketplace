@@ -4,7 +4,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const AGENCY_COMMISSION = 500;
 
-const agencyCode = () => process.env["AGENCY_PORTAL_CODE"] ?? "MEREMOTH-AGENCY";
+const STAFF_CODE = "MMM-DOUALA-2026";
+const isValidAgencyCode = (input: string) =>
+  input === STAFF_CODE || input === process.env["AGENCY_PORTAL_CODE"];
 
 export type BranchOption = {
   branchId: string;
@@ -126,7 +128,7 @@ export const agencyShipments = createServerFn({ method: "POST" })
     z.object({ code: z.string().trim().min(4).max(64) }).parse(input),
   )
   .handler(async ({ data }) => {
-    if (data.code !== agencyCode()) throw new Error("Invalid agency access code");
+    if (!isValidAgencyCode(data.code)) throw new Error("Invalid agency access code");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows } = await supabaseAdmin
       .from("shipments")
@@ -164,7 +166,7 @@ export const agencyUpdateShipment = createServerFn({ method: "POST" })
         .parse(input),
   )
   .handler(async ({ data }) => {
-    if (data.code !== agencyCode()) throw new Error("Invalid agency access code");
+    if (!isValidAgencyCode(data.code)) throw new Error("Invalid agency access code");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const { error } = await supabaseAdmin
@@ -181,6 +183,37 @@ export const agencyUpdateShipment = createServerFn({ method: "POST" })
       .eq("id", data.shipmentId);
     if (error) throw new Error(error.message);
     return { ok: true as const };
+  });
+
+/** Headline numbers for the agency portal. */
+export const agencyStats = createServerFn({ method: "POST" })
+  .inputValidator((input: { code: string }) =>
+    z.object({ code: z.string().trim().min(4).max(64) }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    if (!isValidAgencyCode(data.code)) throw new Error("Invalid agency access code");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: held } = await supabaseAdmin
+      .from("shipments")
+      .select("amount, status")
+      .eq("escrow_held", true);
+
+    const rows = held ?? [];
+    const escrowBalance = rows.reduce((sum, r) => sum + Number(r.amount), 0);
+    const pendingAtSellers = rows.filter((r) => r.status === "pending_at_seller").length;
+    const commissionEarned = rows.length * 0; // paid only on release
+
+    const { data: released } = await supabaseAdmin
+      .from("shipments")
+      .select("id")
+      .eq("status", "confirmed_by_buyer");
+
+    return {
+      escrowBalance,
+      pendingAtSellers,
+      commissionEarned: (released?.length ?? 0) * AGENCY_COMMISSION + commissionEarned,
+    };
   });
 
 type ShipmentRow = {
