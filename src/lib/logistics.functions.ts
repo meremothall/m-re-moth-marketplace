@@ -128,7 +128,7 @@ export const agencyShipments = createServerFn({ method: "POST" })
     z.object({ code: z.string().trim().min(4).max(64) }).parse(input),
   )
   .handler(async ({ data }) => {
-    if (data.code !== agencyCode()) throw new Error("Invalid agency access code");
+    if (!isValidAgencyCode(data.code)) throw new Error("Invalid agency access code");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows } = await supabaseAdmin
       .from("shipments")
@@ -166,7 +166,7 @@ export const agencyUpdateShipment = createServerFn({ method: "POST" })
         .parse(input),
   )
   .handler(async ({ data }) => {
-    if (data.code !== agencyCode()) throw new Error("Invalid agency access code");
+    if (!isValidAgencyCode(data.code)) throw new Error("Invalid agency access code");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     const { error } = await supabaseAdmin
