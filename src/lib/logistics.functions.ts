@@ -185,6 +185,37 @@ export const agencyUpdateShipment = createServerFn({ method: "POST" })
     return { ok: true as const };
   });
 
+/** Headline numbers for the agency portal. */
+export const agencyStats = createServerFn({ method: "POST" })
+  .inputValidator((input: { code: string }) =>
+    z.object({ code: z.string().trim().min(4).max(64) }).parse(input),
+  )
+  .handler(async ({ data }) => {
+    if (!isValidAgencyCode(data.code)) throw new Error("Invalid agency access code");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: held } = await supabaseAdmin
+      .from("shipments")
+      .select("amount, status")
+      .eq("escrow_held", true);
+
+    const rows = held ?? [];
+    const escrowBalance = rows.reduce((sum, r) => sum + Number(r.amount), 0);
+    const pendingAtSellers = rows.filter((r) => r.status === "pending_at_seller").length;
+    const commissionEarned = rows.length * 0; // paid only on release
+
+    const { data: released } = await supabaseAdmin
+      .from("shipments")
+      .select("id")
+      .eq("status", "confirmed_by_buyer");
+
+    return {
+      escrowBalance,
+      pendingAtSellers,
+      commissionEarned: (released?.length ?? 0) * AGENCY_COMMISSION + commissionEarned,
+    };
+  });
+
 type ShipmentRow = {
   id: string;
   buyer_id: string;
