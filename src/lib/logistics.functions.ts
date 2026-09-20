@@ -4,7 +4,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const AGENCY_COMMISSION = 500;
 
-const agencyCode = () => process.env["AGENCY_PORTAL_CODE"] ?? "MEREMOTH-AGENCY";
+const STAFF_CODE = "MMM-DOUALA-2026";
+const isValidAgencyCode = (input: string) =>
+  input === STAFF_CODE || input === process.env["AGENCY_PORTAL_CODE"];
 
 export type BranchOption = {
   branchId: string;
