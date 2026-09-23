@@ -33,7 +33,7 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
-const ADMIN_PASS = "MereMoth2026";
+const ADMIN_PASS = "MMM-DOUALA-2026";
 
 const REVENUE = [
   { month: "Apr", revenue: 420000 },
