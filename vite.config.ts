@@ -1,12 +1,17 @@
-import { defineConfig } from "vite";
-import tsConfigPaths from "vite-tsconfig-paths";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import { defineConfig } from 'vite'
+import { tanstackStart } from '@tanstack/react-start/plugin/vite'
+import viteTsConfigPaths from 'vite-tsconfig-paths'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   plugins: [
-    tsConfigPaths(),
-    tanstackStart({
-      server: { entry: "server" },
+    viteTsConfigPaths({
+      projects: ['./tsconfig.json'],
     }),
+    tailwindcss(),
+    tanstackStart(),
   ],
-});
+  build: {
+    cssMinify: false,
+  },
+})
