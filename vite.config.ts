@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
-import { tanstackStart } from '@tanstack/react-start/plugin/vite'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
+import { tanstackStart } from '@tanstack/react-start'
+import { viteTsConfigPaths } from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
@@ -9,7 +9,7 @@ export default defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    tanstackStart(),
+    tanstackStart({ server: { preset: 'vercel' } }),
   ],
   build: {
     cssMinify: false,
