@@ -2,29 +2,25 @@
 
 ---START COPY--- <!DOCTYPE html><html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>MERE MOTH MALL - FullStack</title><script src="https://cdn.tailwindcss.com"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body class="bg-gray-50">
 
-🌾 MERE MOTH MALL
+🌾 MEREMOTH MALL
 
 + VENDREAdmin
 
-Bottes, Gants 12kV, Pierre - Douala | MoMo 653779134
 
-ToutBottesGantsPierre
 
-Admin
 
-×
+
+
+
 
 Entrer
 
-Pass: MereMoth2026
 
 Activer Backend
 
 + Produit
 
-×
 
-BottesGantsPierreSauvegarder
 
 
 
