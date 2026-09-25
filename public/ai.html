@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Meremoth AI Admin</title>
+<style>
+body{font-family:system-ui;padding:20px;max-width:600px;margin:0 auto;background:#f9f9f9}
+.card{background:white;padding:20px;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.1);margin-bottom:16px}
+h1{font-size:22px}
+input,textarea,button{width:100%;padding:12px;margin-top:8px;border-radius:10px;border:1px solid #ddd}
+button{background:black;color:white;font-weight:bold;border:none}
+.status{padding:10px;border-radius:8px;margin-top:10px;display:none}
+</style>
+</head>
+<body>
+<h1>🤖 Meremoth AI Admin</h1>
+<div class="card">
+<h3>Add New Category / Service</h3>
+<input id="name" placeholder="Name e.g. Cleaning Services">
+<input id="icon" placeholder="Icon emoji e.g. 🧹">
+<textarea id="desc" placeholder="Description"></textarea>
+<button onclick="save()">Save to Supabase</button>
+<div id="status" class="status"></div>
+</div>
+<div class="card">
+<p>Your site is live at <b>meremothmall.com</b></p>
+<p>To access this page: <b>meremothmall.com/ai.html</b></p>
+</div>
+<script>
+function save(){
+ const s=document.getElementById('status');
+ s.style.display='block';
+ s.style.background='#fef3c7';
+ s.textContent='Saving... Connect this to your Supabase in next step.';
+ setTimeout(()=>{s.style.background='#dcfce7'; s.textContent='✅ Ready! Tell me your Supabase table name to connect.'},1000);
+}
+</script>
+</body>
+</html>
