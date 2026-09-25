@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>AI Admin</title>
+<style>
+body{margin:0;background:#0f172a;color:#fff;font-family:sans-serif}
+header{background:#1e3a8a;padding:16px;text-align:center;font-weight:900}
+#box{height:300px;overflow:auto;background:#1e293b;margin:10px;border-radius:12px;padding:10px}
+input,textarea{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid #334155;background:#1e293b;color:#fff;box-sizing:border-box}
+button{width:100%;padding:14px;background:#25D366;border:0;border-radius:12px;font-weight:900;color:#fff}
+.me{background:#3b82f6;margin:6px 0 6px 40px;padding:8px;border-radius:10px}
+.ai{background:#334155;margin:6px 40px 6px 0;padding:8px;border-radius:10px}
+</style>
+</head>
+<body>
+<header>🤖 MEREMOTHMALL AI ADMIN</header>
+<div style="padding:10px">
+<input id="tok" type="password" placeholder="Paste GitHub token ghp_...">
+<div id="box"><div class="ai">Ready boss! Example: change price to 20000 FCFA</div></div>
+<textarea id="q" rows="2" placeholder="Type command..."></textarea>
+<button onclick="run()">UPDATE SHOP</button>
+<div id="st" style="text-align:center;font-size:12px;color:#888;margin-top:8px">Ready</div>
+</div>
+<script>
+let fileContent="", fileSha="";
+async function loadFile(){
+let url="https://api.github.com/repos/Meremoth/m-re-moth-marketplace/contents/public/v2.html";
+let r=await fetch(url,{headers:{Authorization:"token "+tok.value}});
+let j=await r.json();fileContent=atob(j.content);fileSha=j.sha;
+}
+async function run(){
+let cmd=q.value.trim();if(!cmd)return;
+let d=document.createElement("div");d.className="me";d.innerText=cmd;box.appendChild(d);q.value="";
+st.innerText="Loading...";if(!fileContent)await loadFile();
+let newContent=fileContent;
+let wa=cmd.match(/237\d+/);if(wa){newContent=newContent.replace(/237\d+/g,wa[0]);}
+let nums=cmd.match(/\d+/g);
+if(nums&&cmd.toLowerCase().includes("price")){let price=nums[nums.length-1];newContent=newContent.replace(/\d+\s*FCFA/g,price+" FCFA");}
+if(newContent==fileContent){st.innerText="Try: change price to 20000";return;}
+st.innerText="Pushing...";
+let url="https://api.github.com/repos/Meremoth/m-re-moth-marketplace/contents/public/v2.html";
+let body={message:"AI: "+cmd,content:btoa(unescape(encodeURIComponent(newContent))),sha:fileSha};
+let r=await fetch(url,{method:"PUT",headers:{Authorization:"token "+tok.value,"Content-Type":"application/json"},body:JSON.stringify(body)});
+if(r.ok){let res=await r.json();fileSha=res.content.sha;fileContent=newContent;st.innerText="DONE! Check meremothmall.com in 60s";}
+else{st.innerText="Error - check token";}
+}
+</script>
+</body>
+</html>
